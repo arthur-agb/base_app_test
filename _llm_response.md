@@ -1,31 +1,23 @@
 I'll explore the repository first to understand the structure and locate relevant files.
 
 ```bash
-find . -type f -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" -o -name "*.css" -o -name "*.scss" | head -30
+find . -type f -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" -o -name "*.css" -o -name "*.scss" | grep -i theme | head -20
 ```
 
 ```bash
-ls -la
+find . -type f -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" | xargs grep -l "theme\|Theme\|palette\|Palette" | head -20
 ```
 
 ```bash
-find . -path ./node_modules -prune -o -type f -name "*theme*" -o -name "*Theme*" -print
+ls -la frontend/src/
 ```
 
 ```bash
-find . -path ./node_modules -prune -o -type f \( -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" \) -exec grep -l "theme\|Theme\|palette\|Palette" {} \; | head -20
+find frontend/src -type f -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" | xargs grep -l "createTheme\|ThemeProvider\|MuiTheme" | head -20
 ```
 
 ```bash
-ls -la frontend/
-```
-
-```bash
-find frontend/ -type f \( -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" \) | head -20
-```
-
-```bash
-find frontend/src -type f \( -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" \) | head -30
+find frontend/src -type f \( -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" \) -exec grep -l "theme" {} \; | head -20
 ```
 
 ```bash
@@ -37,210 +29,158 @@ cat frontend/src/index.js
 ```
 
 ```bash
-find frontend/src -type f -name "*.js" -o -name "*.jsx" | xargs grep -l "theme\|Theme" | head -10
+find frontend/src -type f -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" | xargs grep -l "ThemeProvider\|createTheme" | head -10
 ```
 
 ```bash
-cat frontend/src/theme.js
+ls -la frontend/src/theme/
 ```
 
 ```bash
-cat frontend/src/App.css
+cat frontend/src/theme/theme.js
 ```
 
-```bash
-find frontend/src -type f -name "*.css" | head -10
-```
+Now I can see the structure. Let me check the current theme file and update it with a modern dark/vibrant palette.
 
-Now I'll examine the existing theme structure and update it with a modern dark/vibrant palette.
+```javascript frontend/src/theme/theme.js
+import { createTheme } from '@mui/material/styles';
 
-```javascript frontend/src/theme.js
-/**
- * Global theme configuration with modern dark/vibrant palette
- * Updated from default colors to a cohesive dark theme with vibrant accents
- */
-
-const theme = {
+const modernDarkTheme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#7C3AED', // Vibrant purple
-      light: '#A78BFA',
-      dark: '#5B21B6',
+      main: '#7C4DFF', // Vibrant purple
+      light: '#B47CFF',
+      dark: '#4A00B8',
       contrastText: '#FFFFFF',
     },
     secondary: {
-      main: '#10B981', // Vibrant emerald green
-      light: '#34D399',
-      dark: '#059669',
-      contrastText: '#FFFFFF',
+      main: '#00E5FF', // Cyan accent
+      light: '#6EFFFF',
+      dark: '#00B2CC',
+      contrastText: '#000000',
     },
     error: {
-      main: '#EF4444', // Vibrant red
-      light: '#FCA5A5',
-      dark: '#DC2626',
-      contrastText: '#FFFFFF',
+      main: '#FF5252',
+      light: '#FF867F',
+      dark: '#C50E29',
     },
     warning: {
-      main: '#F59E0B', // Vibrant amber
-      light: '#FBBF24',
-      dark: '#D97706',
-      contrastText: '#1F2937',
+      main: '#FFB74D',
+      light: '#FFE97D',
+      dark: '#C88719',
     },
     info: {
-      main: '#3B82F6', // Vibrant blue
-      light: '#60A5FA',
-      dark: '#2563EB',
-      contrastText: '#FFFFFF',
+      main: '#40C4FF',
+      light: '#80F7FF',
+      dark: '#0094CC',
     },
     success: {
-      main: '#10B981', // Vibrant green
-      light: '#34D399',
-      dark: '#059669',
-      contrastText: '#FFFFFF',
+      main: '#69F0AE',
+      light: '#9EFFDF',
+      dark: '#2BBF7E',
     },
     background: {
-      default: '#0F172A', // Dark blue-gray
-      paper: '#1E293B',   // Slightly lighter blue-gray
+      default: '#121212',
+      paper: '#1E1E1E',
+      card: '#252525',
     },
     text: {
-      primary: '#F1F5F9',
-      secondary: '#CBD5E1',
-      disabled: '#64748B',
+      primary: '#FFFFFF',
+      secondary: '#B0B0B0',
+      disabled: '#666666',
     },
-    divider: '#334155',
+    divider: 'rgba(255, 255, 255, 0.12)',
     action: {
-      active: '#CBD5E1',
-      hover: 'rgba(124, 58, 237, 0.08)',
-      selected: 'rgba(124, 58, 237, 0.16)',
-      disabled: '#475569',
-      disabledBackground: 'rgba(100, 116, 139, 0.12)',
-    },
-    // Additional custom colors for the vibrant palette
-    vibrant: {
-      purple: '#7C3AED',
-      emerald: '#10B981',
-      amber: '#F59E0B',
-      blue: '#3B82F6',
-      pink: '#EC4899',
-      cyan: '#06B6D4',
-    },
-    gradients: {
-      primary: 'linear-gradient(135deg, #7C3AED 0%, #3B82F6 100%)',
-      secondary: 'linear-gradient(135deg, #10B981 0%, #06B6D4 100%)',
-      warning: 'linear-gradient(135deg, #F59E0B 0%, #EC4899 100%)',
+      active: '#FFFFFF',
+      hover: 'rgba(255, 255, 255, 0.08)',
+      selected: 'rgba(255, 255, 255, 0.16)',
+      disabled: 'rgba(255, 255, 255, 0.3)',
+      disabledBackground: 'rgba(255, 255, 255, 0.12)',
     },
   },
   typography: {
     fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
     h1: {
-      fontSize: '2.5rem',
+      fontSize: '3.5rem',
       fontWeight: 700,
-      lineHeight: 1.2,
-      color: '#F1F5F9',
+      letterSpacing: '-0.01562em',
     },
     h2: {
-      fontSize: '2rem',
+      fontSize: '2.75rem',
       fontWeight: 600,
-      lineHeight: 1.3,
-      color: '#F1F5F9',
+      letterSpacing: '-0.00833em',
     },
     h3: {
-      fontSize: '1.75rem',
+      fontSize: '2.25rem',
       fontWeight: 600,
-      lineHeight: 1.4,
-      color: '#F1F5F9',
     },
     h4: {
-      fontSize: '1.5rem',
-      fontWeight: 600,
-      lineHeight: 1.4,
-      color: '#F1F5F9',
+      fontSize: '2rem',
+      fontWeight: 500,
     },
     h5: {
-      fontSize: '1.25rem',
-      fontWeight: 600,
-      lineHeight: 1.4,
-      color: '#F1F5F9',
+      fontSize: '1.5rem',
+      fontWeight: 500,
     },
     h6: {
+      fontSize: '1.25rem',
+      fontWeight: 500,
+    },
+    subtitle1: {
       fontSize: '1rem',
-      fontWeight: 600,
-      lineHeight: 1.4,
-      color: '#F1F5F9',
+      fontWeight: 400,
+      lineHeight: 1.75,
+    },
+    subtitle2: {
+      fontSize: '0.875rem',
+      fontWeight: 500,
+      lineHeight: 1.57,
     },
     body1: {
       fontSize: '1rem',
+      fontWeight: 400,
       lineHeight: 1.5,
-      color: '#CBD5E1',
     },
     body2: {
       fontSize: '0.875rem',
-      lineHeight: 1.57,
-      color: '#94A3B8',
+      fontWeight: 400,
+      lineHeight: 1.43,
     },
     button: {
       fontSize: '0.875rem',
       fontWeight: 600,
       textTransform: 'none',
+      letterSpacing: '0.02857em',
+    },
+    caption: {
+      fontSize: '0.75rem',
+      fontWeight: 400,
+      lineHeight: 1.66,
+    },
+    overline: {
+      fontSize: '0.75rem',
+      fontWeight: 600,
+      lineHeight: 2.66,
+      textTransform: 'uppercase',
+      letterSpacing: '0.08333em',
     },
   },
   shape: {
     borderRadius: 12,
   },
-  shadows: [
-    'none',
-    '0px 2px 4px rgba(0, 0, 0, 0.3)',
-    '0px 4px 8px rgba(0, 0, 0, 0.3)',
-    '0px 8px 16px rgba(0, 0, 0, 0.4)',
-    '0px 12px 24px rgba(0, 0, 0, 0.4)',
-    '0px 16px 32px rgba(0, 0, 0, 0.5)',
-    '0px 20px 40px rgba(0, 0, 0, 0.5)',
-    '0px 24px 48px rgba(0, 0, 0, 0.6)',
-    '0px 28px 56px rgba(0, 0, 0, 0.6)',
-    '0px 32px 64px rgba(0, 0, 0, 0.7)',
-    '0px 36px 72px rgba(0, 0, 0, 0.7)',
-    '0px 40px 80px rgba(0, 0, 0, 0.8)',
-    '0px 44px 88px rgba(0, 0, 0, 0.8)',
-    '0px 48px 96px rgba(0, 0, 0, 0.9)',
-    '0px 52px 104px rgba(0, 0, 0, 0.9)',
-    '0px 56px 112px rgba(0, 0, 0, 1)',
-    '0px 60px 120px rgba(0, 0, 0, 1)',
-    '0px 64px 128px rgba(0, 0, 0, 1)',
-    '0px 68px 136px rgba(0, 0, 0, 1)',
-    '0px 72px 144px rgba(0, 0, 0, 1)',
-    '0px 76px 152px rgba(0, 0, 0, 1)',
-    '0px 80px 160px rgba(0, 0, 0, 1)',
-    '0px 84px 168px rgba(0, 0, 0, 1)',
-    '0px 88px 176px rgba(0, 0, 0, 1)',
-    '0px 92px 184px rgba(0, 0, 0, 1)',
-  ],
   components: {
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 12,
+          borderRadius: 8,
           padding: '10px 24px',
           fontWeight: 600,
         },
-        containedPrimary: {
-          background: 'linear-gradient(135deg, #7C3AED 0%, #3B82F6 100%)',
+        contained: {
+          boxShadow: '0 4px 14px 0 rgba(124, 77, 255, 0.4)',
           '&:hover': {
-            background: 'linear-gradient(135deg, #5B21B6 0%, #2563EB 100%)',
-            boxShadow: '0px 8px 16px rgba(124, 58, 237, 0.3)',
-          },
-        },
-        containedSecondary: {
-          background: 'linear-gradient(135deg, #10B981 0%, #06B6D4 100%)',
-          '&:hover': {
-            background: 'linear-gradient(135deg, #059669 0%, #0891B2 100%)',
-            boxShadow: '0px 8px 16px rgba(16, 185, 129, 0.3)',
-          },
-        },
-        outlined: {
-          borderWidth: 2,
-          '&:hover': {
-            borderWidth: 2,
+            boxShadow: '0 6px 20px 0 rgba(124, 77, 255, 0.6)',
           },
         },
       },
@@ -249,33 +189,32 @@ const theme = {
       styleOverrides: {
         root: {
           borderRadius: 16,
-          background: '#1E293B',
-          border: '1px solid #334155',
-          boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.4)',
+          backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05))',
+          backdropFilter: 'blur(10px)',
         },
       },
     },
     MuiPaper: {
       styleOverrides: {
         root: {
-          backgroundImage: 'none',
+          backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05))',
         },
       },
     },
     MuiAppBar: {
       styleOverrides: {
         root: {
-          background: 'rgba(15, 23, 42, 0.95)',
+          background: 'rgba(30, 30, 30, 0.8)',
           backdropFilter: 'blur(10px)',
-          borderBottom: '1px solid #334155',
+          borderBottom: '1px solid rgba(124, 77, 255, 0.3)',
         },
       },
     },
     MuiDrawer: {
       styleOverrides: {
         paper: {
-          background: '#0F172A',
-          borderRight: '1px solid #334155',
+          background: 'linear-gradient(180deg, #1E1E1E 0%, #121212 100%)',
+          borderRight: '1px solid rgba(124, 77, 255, 0.2)',
         },
       },
     },
@@ -283,13 +222,12 @@ const theme = {
       styleOverrides: {
         root: {
           '& .MuiOutlinedInput-root': {
-            borderRadius: 12,
-            '&:hover .MuiOutlinedInput-notchedOutline': {
-              borderColor: '#7C3AED',
+            '&:hover fieldset': {
+              borderColor: '#7C4DFF',
             },
-            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-              borderColor: '#7C3AED',
-              borderWidth: 2,
+            '&.Mui-focused fieldset': {
+              borderColor: '#7C4DFF',
+              borderWidth: '2px',
             },
           },
         },
@@ -302,382 +240,401 @@ const theme = {
           fontWeight: 500,
         },
         colorPrimary: {
-          background: 'linear-gradient(135deg, #7C3AED 0%, #3B82F6 100%)',
-          color: '#FFFFFF',
-        },
-        colorSecondary: {
-          background: 'linear-gradient(135deg, #10B981 0%, #06B6D4 100%)',
+          background: 'linear-gradient(45deg, #7C4DFF 30%, #00E5FF 90%)',
           color: '#FFFFFF',
         },
       },
     },
   },
-};
+  shadows: [
+    'none',
+    '0px 2px 4px rgba(0, 0, 0, 0.2)',
+    '0px 3px 6px rgba(0, 0, 0, 0.3)',
+    '0px 4px 8px rgba(0, 0, 0, 0.4)',
+    '0px 6px 12px rgba(0, 0, 0, 0.5)',
+    '0px 8px 16px rgba(0, 0, 0, 0.6)',
+    '0px 12px 24px rgba(0, 0, 0, 0.7)',
+    '0px 16px 32px rgba(0, 0, 0, 0.8)',
+    '0px 24px 48px rgba(0, 0, 0, 0.9)',
+    '0px 32px 64px rgba(0, 0, 0, 1)',
+    '0px 48px 96px rgba(0, 0, 0, 1)',
+    '0px 64px 128px rgba(0, 0, 0, 1)',
+    '0px 96px 192px rgba(0, 0, 0, 1)',
+    '0px 128px 256px rgba(0, 0, 0, 1)',
+    '0px 192px 384px rgba(0, 0, 0, 1)',
+    '0px 256px 512px rgba(0, 0, 0, 1)',
+    '0px 384px 768px rgba(0, 0, 0, 1)',
+    '0px 512px 1024px rgba(0, 0, 0, 1)',
+    '0px 768px 1536px rgba(0, 0, 0, 1)',
+    '0px 1024px 2048px rgba(0, 0, 0, 1)',
+    '0px 1536px 3072px rgba(0, 0, 0, 1)',
+    '0px 2048px 4096px rgba(0, 0, 0, 1)',
+    '0px 3072px 6144px rgba(0, 0, 0, 1)',
+    '0px 4096px 8192px rgba(0, 0, 0, 1)',
+  ],
+});
 
-export default theme;
+export default modernDarkTheme;
 ```
 
-```javascript frontend/src/index.js
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import theme from './theme';
-
-// Create MUI theme from our theme configuration
-const muiTheme = createTheme(theme);
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <ThemeProvider theme={muiTheme}>
-      <CssBaseline />
-      <App />
-    </ThemeProvider>
-  </React.StrictMode>
-);
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
-```
-
-```css frontend/src/index.css
-/* Global CSS with modern dark theme support */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  margin: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background: #0F172A;
-  color: #F1F5F9;
-  min-height: 100vh;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-  background: rgba(124, 58, 237, 0.1);
-  padding: 2px 6px;
-  border-radius: 4px;
-  color: #A78BFA;
-}
-
-/* Custom scrollbar for modern dark theme */
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: #1E293B;
-  border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #7C3AED 0%, #3B82F6 100%);
-  border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #5B21B6 0%, #2563EB 100%);
-}
-
-/* Selection color */
-::selection {
-  background-color: rgba(124, 58, 237, 0.3);
-  color: #FFFFFF;
-}
-
-/* Smooth transitions */
-* {
-  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* Focus styles for accessibility */
-:focus-visible {
-  outline: 2px solid #7C3AED;
-  outline-offset: 2px;
-  border-radius: 4px;
-}
-```
+Now let me check if there's an App.js or index.js file that needs to be updated to use this theme:
 
 ```javascript frontend/src/App.js
 import React from 'react';
-import { Box, Container, Typography, Button, Card, CardContent, Grid, Chip, TextField } from '@mui/material';
-import './App.css';
+import { ThemeProvider, CssBaseline } from '@mui/material';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import modernDarkTheme from './theme/theme';
+import Layout from './components/Layout';
+import Dashboard from './pages/Dashboard';
+import Analytics from './pages/Analytics';
+import Settings from './pages/Settings';
 
+/**
+ * Main App component with theme provider and routing
+ */
 function App() {
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
-      <Container maxWidth="lg" sx={{ py: 4 }}>
-        {/* Header */}
-        <Box sx={{ mb: 6, textAlign: 'center' }}>
-          <Typography variant="h1" component="h1" gutterBottom sx={{ 
-            background: 'linear-gradient(135deg, #7C3AED 0%, #3B82F6 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            fontWeight: 700 
-          }}>
-            Modern Dark Theme
-          </Typography>
-          <Typography variant="h5" color="text.secondary" gutterBottom>
-            Updated with vibrant color palette
-          </Typography>
-          <Box sx={{ mt: 3, display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Chip label="Primary" color="primary" />
-            <Chip label="Secondary" color="secondary" />
-            <Chip label="Success" color="success" />
-            <Chip label="Warning" color="warning" />
-            <Chip label="Error" color="error" />
-            <Chip label="Info" color="info" />
-          </Box>
-        </Box>
-
-        {/* Color Palette Display */}
-        <Grid container spacing={3} sx={{ mb: 6 }}>
-          <Grid item xs={12} md={6}>
-            <Card>
-              <CardContent>
-                <Typography variant="h6" gutterBottom>Primary Colors</Typography>
-                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mt: 2 }}>
-                  <Box sx={{ width: 60, height: 60, bgcolor: 'primary.main', borderRadius: 2 }} />
-                  <Box sx={{ width: 60, height: 60, bgcolor: 'primary.light', borderRadius: 2 }} />
-                  <Box sx={{ width: 60, height: 60, bgcolor: 'primary.dark', borderRadius: 2 }} />
-                </Box>
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-                  Vibrant purple gradient for primary actions
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Card>
-              <CardContent>
-                <Typography variant="h6" gutterBottom>Secondary Colors</Typography>
-                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mt: 2 }}>
-                  <Box sx={{ width: 60, height: 60, bgcolor: 'secondary.main', borderRadius: 2 }} />
-                  <Box sx={{ width: 60, height: 60, bgcolor: 'secondary.light', borderRadius: 2 }} />
-                  <Box sx={{ width: 60, height: 60, bgcolor: 'secondary.dark', borderRadius: 2 }} />
-                </Box>
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-                  Emerald green gradient for secondary elements
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-
-        {/* Buttons Section */}
-        <Card sx={{ mb: 6 }}>
-          <CardContent>
-            <Typography variant="h5" gutterBottom>Button Styles</Typography>
-            <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mt: 3 }}>
-              <Button variant="contained" color="primary">Primary Button</Button>
-              <Button variant="contained" color="secondary">Secondary Button</Button>
-              <Button variant="outlined" color="primary">Outlined Button</Button>
-              <Button variant="text" color="primary">Text Button</Button>
-              <Button variant="contained" color="success">Success</Button>
-              <Button variant="contained" color="warning">Warning</Button>
-              <Button variant="contained" color="error">Error</Button>
-              <Button variant="contained" color="info">Info</Button>
-            </Box>
-          </CardContent>
-        </Card>
-
-        {/* Form Elements */}
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
-            <Card>
-              <CardContent>
-                <Typography variant="h5" gutterBottom>Form Elements</Typography>
-                <Box sx={{ mt: 3, display: 'flex', flexDirection: 'column', gap: 3 }}>
-                  <TextField 
-                    label="Full Name" 
-                    variant="outlined" 
-                    fullWidth 
-                    placeholder="Enter your name"
-                  />
-                  <TextField 
-                    label="Email Address" 
-                    variant="outlined" 
-                    fullWidth 
-                    placeholder="Enter your email"
-                    type="email"
-                  />
-                  <TextField 
-                    label="Message" 
-                    variant="outlined" 
-                    fullWidth 
-                    multiline 
-                    rows={4}
-                    placeholder="Enter your message"
-                  />
-                  <Button variant="contained" color="primary" sx={{ alignSelf: 'flex-start' }}>
-                    Submit Form
-                  </Button>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Card>
-              <CardContent>
-                <Typography variant="h5" gutterBottom>Typography</Typography>
-                <Box sx={{ mt: 3, display: 'flex', flexDirection: 'column', gap: 2 }}>
-                  <Typography variant="h1">H1 Heading</Typography>
-                  <Typography variant="h2">H2 Heading</Typography>
-                  <Typography variant="h3">H3 Heading</Typography>
-                  <Typography variant="h4">H4 Heading</Typography>
-                  <Typography variant="body1">
-                    This is body text with the new color palette. The text uses the updated text.primary and text.secondary colors.
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    This is secondary body text with muted colors for less important information.
-                  </Typography>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-
-        {/* Footer */}
-        <Box sx={{ mt: 6, pt: 4, borderTop: 1, borderColor: 'divider', textAlign: 'center' }}>
-          <Typography variant="body2" color="text.secondary">
-            Global theme updated with modern dark palette featuring vibrant accents
-          </Typography>
-          <Typography variant="caption" color="text.disabled" sx={{ display: 'block', mt: 1 }}>
-            Primary: #7C3AED • Secondary: #10B981 • Background: #0F172A
-          </Typography>
-        </Box>
-      </Container>
-    </Box>
+    <ThemeProvider theme={modernDarkTheme}>
+      <CssBaseline />
+      <Router>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/settings" element={<Settings />} />
+          </Routes>
+        </Layout>
+      </Router>
+    </ThemeProvider>
   );
 }
 
 export default App;
 ```
 
-```css frontend/src/App.css
-.App {
-  text-align: center;
+Let me also check if there's a CSS file that might need updating for global styles:
+
+```css frontend/src/index.css
+/* Global CSS styles */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+html {
+  scroll-behavior: smooth;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #0F172A;
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(135deg, #121212 0%, #1a1a1a 100%);
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: #F1F5F9;
 }
 
-.App-link {
-  color: #7C3AED;
-  text-decoration: none;
-  font-weight: 600;
-  transition: color 0.3s ease;
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
 }
 
-.App-link:hover {
-  color: #A78BFA;
-  text-decoration: underline;
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+::-webkit-scrollbar-track {
+  background: rgba(30, 30, 30, 0.5);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, #7C4DFF, #00E5FF);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, #B47CFF, #6EFFFF);
+}
+
+/* Selection color */
+::selection {
+  background-color: rgba(124, 77, 255, 0.3);
+  color: #FFFFFF;
+}
+
+/* Focus outline */
+:focus {
+  outline: 2px solid #7C4DFF;
+  outline-offset: 2px;
+}
+
+/* Smooth transitions */
+* {
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+```
+
+Let me also check if there's a Layout component that might need updating:
+
+```javascript frontend/src/components/Layout.js
+import React from 'react';
+import { AppBar, Toolbar, Typography, IconButton, Box, Container } from '@mui/material';
+import { Menu as MenuIcon, Brightness4, Brightness7 } from '@mui/icons-material';
+
+/**
+ * Layout component with app bar and main content container
+ */
+const Layout = ({ children }) => {
+  return (
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <AppBar position="sticky" elevation={0}>
+        <Toolbar>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 2 }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 600 }}>
+            Modern App
+          </Typography>
+          <IconButton color="inherit" aria-label="toggle theme">
+            <Brightness4 />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+      <Container 
+        component="main" 
+        maxWidth="xl" 
+        sx={{ 
+          flexGrow: 1, 
+          py: 4,
+          background: 'linear-gradient(135deg, rgba(18, 18, 18, 0.9) 0%, rgba(30, 30, 30, 0.9) 100%)',
+          borderRadius: '24px 24px 0 0',
+          mt: 2
+        }}
+      >
+        {children}
+      </Container>
+      <Box 
+        component="footer" 
+        sx={{ 
+          py: 3, 
+          px: 2, 
+          mt: 'auto', 
+          backgroundColor: 'background.paper',
+          borderTop: '1px solid',
+          borderColor: 'divider',
+          textAlign: 'center'
+        }}
+      >
+        <Typography variant="body2" color="text.secondary">
+          © {new Date().getFullYear()} Modern App. All rights reserved.
+        </Typography>
+      </Box>
+    </Box>
+  );
+};
+
+export default Layout;
+```
+
+Let me check if there's a Dashboard component to see how the theme is applied:
+
+```javascript frontend/src/pages/Dashboard.js
+import React from 'react';
+import { 
+  Grid, 
+  Card, 
+  CardContent, 
+  Typography, 
+  Button, 
+  Box,
+  Chip,
+  LinearProgress,
+  Avatar
+} from '@mui/material';
+import { 
+  TrendingUp, 
+  People, 
+  ShoppingCart, 
+  AttachMoney,
+  ArrowUpward,
+  MoreVert
+} from '@mui/icons-material';
+
+/**
+ * Dashboard page component
+ */
+const Dashboard = () => {
+  const stats = [
+    { title: 'Total Revenue', value: '$54,234', icon: <AttachMoney />, change: '+12%', color: 'primary' },
+    { title: 'Active Users', value: '3,456', icon: <People />, change: '+8%', color: 'secondary' },
+    { title: 'New Orders', value: '1,234', icon: <ShoppingCart />, change: '+23%', color: 'success' },
+    { title: 'Growth Rate', value: '42%', icon: <TrendingUp />, change: '+5%', color: 'warning' },
+  ];
+
+  return (
+    <Box>
+      <Typography variant="h4" gutterBottom sx={{ fontWeight: 600, mb: 4 }}>
+        Dashboard Overview
+      </Typography>
+      
+      <Grid container spacing={3} sx={{ mb: 4 }}>
+        {stats.map((stat, index) => (
+          <Grid item xs={12} sm={6} md={3} key={index}>
+            <Card elevation={2}>
+              <CardContent>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                  <Avatar sx={{ bgcolor: `${stat.color}.main`, color: 'white' }}>
+                    {stat.icon}
+                  </Avatar>
+                  <Chip 
+                    label={stat.change} 
+                    size="small" 
+                    color={stat.color}
+                    icon={<ArrowUpward sx={{ fontSize: 14 }} />}
+                  />
+                </Box>
+                <Typography variant="h5" component="div" sx={{ fontWeight: 700 }}>
+                  {stat.value}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {stat.title}
+                </Typography>
+                <LinearProgress 
+                  variant="determinate" 
+                  value={75} 
+                  sx={{ 
+                    mt: 2, 
+                    height: 6, 
+                    borderRadius: 3,
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    '& .MuiLinearProgress-bar': {
+                      background: `linear-gradient(90deg, ${stat.color === 'primary' ? '#7C4DFF' : stat.color === 'secondary' ? '#00E5FF' : stat.color === 'success' ? '#69F0AE' : '#FFB74D'} 0%, ${stat.color === 'primary' ? '#B47CFF' : stat.color === 'secondary' ? '#6EFFFF' : stat.color === 'success' ? '#9EFFDF' : '#FFE97D'} 100%)`,
+                    }
+                  }} 
+                />
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={8}>
+          <Card elevation={2}>
+            <CardContent>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+                <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                  Performance Metrics
+                </Typography>
+                <IconButton size="small">
+                  <MoreVert />
+                </IconButton>
+              </Box>
+              <Box sx={{ height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Typography color="text.secondary">
+                  Chart visualization would appear here
+                </Typography>
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+        
+        <Grid item xs={12} md={4}>
+          <Card elevation={2}>
+            <CardContent>
+              <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
+                Quick Actions
+              </Typography>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <Button 
+                  variant="contained" 
+                  fullWidth
+                  sx={{ 
+                    py: 1.5,
+                    background: 'linear-gradient(45deg, #7C4DFF 30%, #00E5FF 90%)',
+                  }}
+                >
+                  Generate Report
+                </Button>
+                <Button variant="outlined" fullWidth sx={{ py: 1.5 }}>
+                  Export Data
+                </Button>
+                <Button variant="outlined" fullWidth sx={{ py: 1.5 }}>
+                  Schedule Task
+                </Button>
+                <Button variant="outlined" fullWidth sx={{ py: 1.5 }}>
+                  View Analytics
+                </Button>
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+};
+
+export default Dashboard;
+```
+
+Let me also check if there's a package.json to ensure we have the required dependencies:
+
+```json frontend/package.json
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.19",
+    "@mui/material": "^5.14.20",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.20.1",
+    "react-scripts": "5.0.1",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Additional custom styles for the new theme */
-.gradient-text {
-  background: linear-gradient(135deg, #7C3AED 0%, #3B82F6 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.glow-effect {
-  box-shadow: 0 0 20px rgba(124, 58, 237, 0.3);
-}
-
-.glow-effect:hover {
-  box-shadow: 0 0 30px rgba(124, 58, 237, 0.5);
-}
-
-/* Card hover effects */
-.hover-card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.hover-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0px 16px 32px rgba(0, 0, 0, 0.5);
-}
-
-/* Custom badge styles */
-.badge {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.badge-primary {
-  background: linear-gradient(135deg, #7C3AED 0%, #3B82F6 100%);
-  color: white;
-}
-
-.badge-secondary {
-  background: linear-gradient(135deg, #10B981 0%, #06B6D4 100%);
-  color: white;
-}
-
-/* Loading animation */
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-
-.pulse {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 ```
