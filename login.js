@@ -8,10 +8,10 @@ document.addEventListener('DOMContentLoaded', function() {
     loginForm.addEventListener('submit', function(event) {
         event.preventDefault();
         
-        const username = document.getElementById('username').value.trim();
+        const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
         
-        // Clear previous error
+        // Clear previous error message
         errorMessage.textContent = '';
         
         // Basic validation
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
      */
     function simulateLogin(username, password) {
         // In a real application, this would be an API call
-        console.log('Attempting login for:', username);
+        console.log('Attempting login with:', { username, password });
         
         // Simulate API delay
         setTimeout(() => {
