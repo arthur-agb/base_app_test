@@ -1,258 +1,172 @@
 """
-Theme manager for handling global theme changes.
+Theme manager for handling global theme updates.
 """
 import json
-from typing import Dict, Optional, Callable, List
-from enum import Enum
-from .palette import Palette
-
-
-class ThemeMode(Enum):
-    """Available theme modes."""
-    DEFAULT = "default"
-    MODERN_DARK = "modern_dark"
-    VIBRANT = "vibrant"
-    CUSTOM = "custom"
+import os
+from typing import Dict, Optional, Any
+from .palette import ColorPalette
 
 
 class ThemeManager:
     """
-    Manages the global application theme.
+    Manages application themes and color palettes.
+    
+    Attributes:
+        current_palette: Currently active color palette
+        available_palettes: Dictionary of available palettes
     """
     
-    def __init__(self):
-        self._current_mode: ThemeMode = ThemeMode.DEFAULT
-        self._current_palette: Palette = Palette.get_default()
-        self._custom_palette: Optional[Palette] = None
-        self._listeners: List[Callable[[Palette], None]] = []
-        self._config_file = "theme_config.json"
-    
-    @property
-    def current_mode(self) -> ThemeMode:
-        """Get current theme mode."""
-        return self._current_mode
-    
-    @property
-    def current_palette(self) -> Palette:
-        """Get current color palette."""
-        return self._current_palette
-    
-    def set_theme(self, mode: ThemeMode, custom_palette: Optional[Palette] = None) -> None:
+    def __init__(self, config_path: Optional[str] = None):
         """
-        Set the application theme.
+        Initialize theme manager.
         
         Args:
-            mode: The theme mode to use
-            custom_palette: Custom palette for CUSTOM mode
+            config_path: Path to theme configuration file
         """
-        if mode == ThemeMode.DEFAULT:
-            palette = Palette.get_default()
-        elif mode == ThemeMode.MODERN_DARK:
-            palette = Palette.get_modern_dark()
-        elif mode == ThemeMode.VIBRANT:
-            palette = Palette.get_vibrant()
-        elif mode == ThemeMode.CUSTOM:
-            if custom_palette is None:
-                raise ValueError("Custom palette required for CUSTOM mode")
-            palette = custom_palette
-            self._custom_palette = custom_palette
-        else:
-            raise ValueError(f"Unknown theme mode: {mode}")
-        
-        self._current_mode = mode
-        self._current_palette = palette
-        
-        # Notify all listeners
-        self._notify_listeners()
-        
-        # Save configuration
-        self._save_config()
+        self.config_path = config_path or "theme_config.json"
+        self.current_palette: ColorPalette = ColorPalette.get_default_palette()
+        self.available_palettes: Dict[str, ColorPalette] = {
+            "default": ColorPalette.get_default_palette(),
+            "dark": ColorPalette.get_dark_palette(),
+            "vibrant": ColorPalette.get_vibrant_palette(),
+        }
+        self._load_config()
     
-    def set_modern_dark_theme(self) -> None:
-        """Set modern dark theme."""
-        self.set_theme(ThemeMode.MODERN_DARK)
-    
-    def set_vibrant_theme(self) -> None:
-        """Set vibrant theme."""
-        self.set_theme(ThemeMode.VIBRANT)
-    
-    def set_default_theme(self) -> None:
-        """Set default theme."""
-        self.set_theme(ThemeMode.DEFAULT)
-    
-    def set_custom_theme(self, palette: Palette) -> None:
-        """Set custom theme with provided palette."""
-        self.set_theme(ThemeMode.CUSTOM, palette)
-    
-    def add_listener(self, listener: Callable[[Palette], None]) -> None:
-        """
-        Add a listener for theme changes.
-        
-        Args:
-            listener: Function to call when theme changes
-        """
-        self._listeners.append(listener)
-    
-    def remove_listener(self, listener: Callable[[Palette], None]) -> None:
-        """
-        Remove a theme change listener.
-        
-        Args:
-            listener: Listener to remove
-        """
-        if listener in self._listeners:
-            self._listeners.remove(listener)
-    
-    def _notify_listeners(self) -> None:
-        """Notify all registered listeners of theme change."""
-        for listener in self._listeners:
-            listener(self._current_palette)
+    def _load_config(self) -> None:
+        """Load theme configuration from file."""
+        if os.path.exists(self.config_path):
+            try:
+                with open(self.config_path, 'r') as f:
+                    config = json.load(f)
+                    palette_name = config.get("current_palette", "default")
+                    self.set_palette(palette_name)
+            except (json.JSONDecodeError, IOError):
+                # If config is corrupted, use default
+                self.current_palette = ColorPalette.get_default_palette()
     
     def _save_config(self) -> None:
         """Save theme configuration to file."""
         config = {
-            'mode': self._current_mode.value,
-            'palette': self._current_palette.to_dict()
+            "current_palette": self.get_current_palette_name(),
+            "available_palettes": list(self.available_palettes.keys())
         }
         
         try:
-            with open(self._config_file, 'w') as f:
+            with open(self.config_path, 'w') as f:
                 json.dump(config, f, indent=2)
-        except Exception as e:
-            print(f"Failed to save theme config: {e}")
+        except IOError:
+            # Silently fail if we can't save config
+            pass
     
-    def load_config(self) -> bool:
+    def set_palette(self, palette_name: str) -> bool:
         """
-        Load theme configuration from file.
+        Set the current color palette.
+        
+        Args:
+            palette_name: Name of the palette to set
+            
+        Returns:
+            True if palette was set successfully, False otherwise
+        """
+        if palette_name not in self.available_palettes:
+            return False
+        
+        self.current_palette = self.available_palettes[palette_name]
+        self._save_config()
+        return True
+    
+    def get_current_palette_name(self) -> str:
+        """
+        Get the name of the current palette.
         
         Returns:
-            True if config was loaded successfully, False otherwise
+            Name of the current palette
         """
-        try:
-            with open(self._config_file, 'r') as f:
-                config = json.load(f)
+        for name, palette in self.available_palettes.items():
+            if palette == self.current_palette:
+                return name
+        return "default"
+    
+    def get_palette(self, name: str) -> Optional[ColorPalette]:
+        """
+        Get a palette by name.
+        
+        Args:
+            name: Name of the palette
             
-            mode = ThemeMode(config.get('mode', 'default'))
-            palette_dict = config.get('palette', {})
+        Returns:
+            ColorPalette if found, None otherwise
+        """
+        return self.available_palettes.get(name)
+    
+    def add_custom_palette(self, name: str, palette: ColorPalette) -> None:
+        """
+        Add a custom palette.
+        
+        Args:
+            name: Name for the custom palette
+            palette: ColorPalette instance
+        """
+        self.available_palettes[name] = palette
+    
+    def remove_calette(self, name: str) -> bool:
+        """
+        Remove a palette.
+        
+        Args:
+            name: Name of the palette to remove
             
-            if mode == ThemeMode.CUSTOM and palette_dict:
-                palette = Palette(**palette_dict)
-                self.set_theme(mode, palette)
-            else:
-                self.set_theme(mode)
+        Returns:
+            True if removed, False if not found or is default/dark/vibrant
+        """
+        if name in ["default", "dark", "vibrant"]:
+            return False
+        
+        if name in self.available_palettes:
+            del self.available_palettes[name]
+            
+            # If current palette was removed, fall back to default
+            if self.get_current_palette_name() == name:
+                self.set_palette("default")
             
             return True
-        except FileNotFoundError:
-            print("Theme config file not found, using default theme")
-            return False
-        except Exception as e:
-            print(f"Failed to load theme config: {e}")
-            return False
+        
+        return False
     
-    def get_css(self) -> str:
+    def get_all_palettes(self) -> Dict[str, Dict[str, str]]:
         """
-        Get CSS stylesheet for current theme.
+        Get all available palettes as dictionaries.
         
         Returns:
-            CSS string with theme variables
+            Dictionary of palette names to palette dictionaries
         """
-        css_vars = self._current_palette.get_css_variables()
+        return {name: palette.to_dict() for name, palette in self.available_palettes.items()}
+    
+    def generate_css_variables(self) -> str:
+        """
+        Generate CSS variables for the current palette.
         
-        css = ":root {\n"
-        for var_name, value in css_vars.items():
-            css += f"  {var_name}: {value};\n"
-        css += "}\n\n"
+        Returns:
+            CSS string with variables
+        """
+        palette_dict = self.current_palette.to_dict()
+        css_vars = []
         
-        # Additional theme-specific styles
-        css += """
-body {
-  background-color: var(--color-background);
-  color: var(--color-text-primary);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  margin: 0;
-  padding: 0;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.container {
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  padding: 20px;
-  margin: 20px;
-}
-
-.btn-primary {
-  background-color: var(--color-primary);
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.btn-primary:hover {
-  background-color: var(--color-primary-dark);
-}
-
-.btn-secondary {
-  background-color: var(--color-secondary);
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.btn-secondary:hover {
-  background-color: var(--color-secondary-dark);
-}
-
-.text-primary {
-  color: var(--color-text-primary);
-}
-
-.text-secondary {
-  color: var(--color-text-secondary);
-}
-
-.border {
-  border: 1px solid var(--color-border);
-}
-
-.error {
-  color: var(--color-error);
-}
-
-.warning {
-  color: var(--color-warning);
-}
-
-.success {
-  color: var(--color-success);
-}
-
-.info {
-  color: var(--color-info);
-}
-
-.accent1 {
-  color: var(--color-accent1);
-}
-
-.accent2 {
-  color: var(--color-accent2);
-}
-
-.accent3 {
-  color: var(--color-accent3);
-}
-"""
+        for key, value in palette_dict.items():
+            css_var_name = f"--color-{key.replace('_', '-')}"
+            css_vars.append(f"{css_var_name}: {value};")
         
-        return css
-
-
-# Global theme manager instance
-theme_manager = ThemeManager()
+        return ":root {\n  " + "\n  ".join(css_vars) + "\n}"
+    
+    def generate_theme_object(self) -> Dict[str, Any]:
+        """
+        Generate a theme object for JavaScript/TypeScript.
+        
+        Returns:
+            Dictionary with theme data
+        """
+        return {
+            "current": self.get_current_palette_name(),
+            "palette": self.current_palette.to_dict(),
+            "available": list(self.available_palettes.keys())
+        }

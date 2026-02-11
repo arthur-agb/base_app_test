@@ -1,6 +1,6 @@
 """
-Base application package.
+Application package initialization.
 """
-from .theme import theme_manager
+from .theme import ThemeManager, ColorPalette
 
-__all__ = ["theme_manager"]
+__all__ = ["ThemeManager", "ColorPalette"]
