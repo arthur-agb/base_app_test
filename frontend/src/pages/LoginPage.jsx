@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import './LoginPage.css';
 
 const LoginPage = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -13,14 +13,13 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    setLoading(true);
-
     try {
-      await login(username, password);
+      setError('');
+      setLoading(true);
+      await login(email, password);
       navigate('/dashboard');
     } catch (err) {
-      setError('Invalid username or password');
+      setError('Failed to log in. Please check your credentials.');
     } finally {
       setLoading(false);
     }
@@ -36,30 +35,26 @@ const LoginPage = () => {
         
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
-            <label htmlFor="username" className="form-label">Username</label>
+            <label htmlFor="email">Email Address</label>
             <input
-              id="username"
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="form-input"
-              placeholder="Enter your username"
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
-              disabled={loading}
+              placeholder="Enter your email"
             />
           </div>
           
           <div className="form-group">
-            <label htmlFor="password" className="form-label">Password</label>
+            <label htmlFor="password">Password</label>
             <input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="form-input"
-              placeholder="Enter your password"
               required
-              disabled={loading}
+              placeholder="Enter your password"
             />
           </div>
           
@@ -73,11 +68,16 @@ const LoginPage = () => {
         </form>
         
         <div className="login-footer">
-          <p className="footer-text">
-            Don't have an account? <a href="/register" className="footer-link">Sign up</a>
+          <p>
+            Don't have an account?{' '}
+            <a href="/register" className="register-link">
+              Create one here
+            </a>
           </p>
-          <p className="footer-text">
-            <a href="/forgot-password" className="footer-link">Forgot password?</a>
+          <p>
+            <a href="/forgot-password" className="forgot-password-link">
+              Forgot your password?
+            </a>
           </p>
         </div>
       </div>
