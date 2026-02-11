@@ -1,38 +1,29 @@
 {
-  "name": "base-app-test",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
-  },
+  "name": "base_app_test",
+  "version": "1.0.0",
+  "description": "Base application test",
+  "main": "index.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "verify": "npm run build && echo '✅ Build successful!'",
-    "check-ui": "npm run build && echo '✅ UI verification passed!'",
-    "health-check": "echo '🚀 Application health check...' && npm run verify && echo '✅ All checks passed!'"
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+    "start:backend": "node backend/server.js",
+    "start:frontend": "cd frontend && npm start",
+    "build": "cd frontend && npm run build",
+    "test": "echo \"Running tests...\" && npm run test:backend && npm run test:frontend",
+    "test:backend": "cd backend && npm test",
+    "test:frontend": "cd frontend && npm test",
+    "verify": "node scripts/verify.js",
+    "lint": "eslint .",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\""
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+  "dependencies": {
+    "concurrently": "^7.0.0",
+    "express": "^4.18.0"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "prettier": "^2.8.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   }
 }
