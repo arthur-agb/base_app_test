@@ -2,11 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-
-// Verify React is loaded
-console.log('🚀 Starting Base Application Test...');
-console.log('React version:', React.version);
-console.log('Environment:', process.env.NODE_ENV);
+import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -15,20 +11,13 @@ root.render(
   </React.StrictMode>
 );
 
-// Report web vitals
-const reportWebVitals = (onPerfEntry) => {
-  if (onPerfEntry && onPerfEntry instanceof Function) {
-    import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
-      getCLS(onPerfEntry);
-      getFID(onPerfEntry);
-      getFCP(onPerfEntry);
-      getLCP(onPerfEntry);
-      getTTFB(onPerfEntry);
-    });
-  }
-};
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
 
-// Only report in development
-if (process.env.NODE_ENV === 'development') {
-  reportWebVitals(console.log);
-}
+// Log startup verification
+console.log('🚀 Application started successfully!');
+console.log('✅ React version:', React.version);
+console.log('✅ DOM root created');
+console.log('✅ App component mounted');

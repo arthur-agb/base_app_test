@@ -1,14 +1,11 @@
 # Base Application Test
 
-A React application for startup and verification testing.
+A React application for testing and verification purposes.
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 14.0 or later
-- npm or yarn
+- Node.js 14.0 or higher
+- npm 6.0 or higher
 
 ### Installation
-
-1. Clone the repository
-2. Install dependencies:
