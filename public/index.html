@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base App Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .card p {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+        
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        .status-healthy {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .btn:hover {
+            background: #5a67d8;
+        }
+        
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+        
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .code-block {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 5px;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Base App Test</h1>
+            <p>Application verification and startup interface</p>
+        </header>
+        
+        <main>
+            <div class="dashboard">
+                <div class="card">
+                    <h2>Application Status</h2>
+                    <div class="status-indicator status-healthy" id="healthStatus">
+                        Loading...
+                    </div>
+                    <p>Current status of the application backend and services.</p>
+                    <button class="btn" onclick="checkHealth()">Check Health</button>
+                </div>
+                
+                <div class="card">
+                    <h2>Quick Start</h2>
+                    <p>Get started with the application using these commands:</p>
+                    <div class="code-block">
+                        npm install<br>
+                        npm start
+                    </div>
+                    <button class="btn" onclick="copyCommands()">Copy Commands</button>
+                </div>
+                
+                <div class="card">
+                    <h2>Verification</h2>
+                    <p>Run the verification script to check application structure:</p>
+                    <div class="code-block">
+                        npm run verify
+                    </div>
+                    <button class="btn btn-secondary" onclick="runVerification()">Run Verification</button>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>API Endpoints</h2>
+                <p>Available API endpoints for testing and integration:</p>
+                <div class="code-block">
+                    GET /api/health - Health check endpoint<br>
+                    GET / - Main application page
+                </div>
+                <button class="btn" onclick="testApi()">Test API</button>
+            </div>
+        </main>
+        
+        <footer class="footer">
+            <p>Base App Test v1.0.0</p>
+            <p>Application verification interface</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Check health on page load
+        document.addEventListener('DOMContentLoaded', checkHealth);
+        
+        async function checkHealth() {
+            const statusElement = document.getElementById('healthStatus');
+            statusElement.textContent = 'Checking...';
+            statusElement.className = 'status-indicator';
+            
+            try {
+                const response = await fetch('/api/health');
+                if (response.ok) {
+                    const data = await response.json();
+                    statusElement.textContent = `Healthy (v${data.version})`;
+                    statusElement.className = 'status-indicator status-healthy';
+                } else {
+                    throw new Error('Health check failed');
+                }
+            } catch (error) {
+                statusElement.textContent = 'Unavailable';
+                statusElement.className = 'status-indicator status-warning';
+            }
+        }
+        
+        function copyCommands() {
+            const commands = 'npm install\nnpm start';
+            navigator.clipboard.writeText(commands).then(() => {
+                alert('Commands copied to clipboard!');
+            });
+        }
+        
+        async function runVerification() {
+            alert('Verification would run in a real environment. Check the console or run: npm run verify');
+        }
+        
+        async function testApi() {
+            try {
+                const response = await fetch('/api/health');
+                if (response.ok) {
+                    const data = await response.json();
+                    alert(`API Test Successful!\n\nStatus: ${data.status}\nVersion: ${data.version}\nTimestamp: ${new Date(data.timestamp).toLocaleString()}`);
+                } else {
+                    throw new Error(`API returned ${response.status}`);
+                }
+            } catch (error) {
+                alert(`API Test Failed: ${error.message}`);
+            }
+        }
+    </script>
+</body>
+</html>
