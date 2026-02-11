@@ -19,7 +19,7 @@ const LoginPage = () => {
       await login(email, password);
       navigate('/dashboard');
     } catch (err) {
-      setError('Failed to log in. Please check your credentials.');
+      setError('Failed to sign in. Please check your credentials.');
       console.error(err);
     } finally {
       setLoading(false);
@@ -29,55 +29,38 @@ const LoginPage = () => {
   return (
     <div className="login-container">
       <div className="login-form-wrapper">
-        <h1 className="login-title">Welcome Back</h1>
-        <p className="login-subtitle">Please sign in to your account</p>
-        
+        <h1 className="login-title">Sign In</h1>
         {error && <div className="login-error">{error}</div>}
-        
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
             <label htmlFor="email">Email Address</label>
             <input
-              id="email"
               type="email"
+              id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="Enter your email"
-              className="form-input"
             />
           </div>
-          
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <input
-              id="password"
               type="password"
+              id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               placeholder="Enter your password"
-              className="form-input"
             />
           </div>
-          
-          <button 
-            type="submit" 
-            className="login-button"
-            disabled={loading}
-          >
-            {loading ? 'Signing in...' : 'Sign In'}
+          <button type="submit" disabled={loading} className="login-button">
+            {loading ? 'Signing In...' : 'Sign In'}
           </button>
         </form>
-        
-        <div className="login-footer">
-          <p>
-            Don't have an account?{' '}
-            <a href="/register" className="footer-link">Sign up</a>
-          </p>
-          <p>
-            <a href="/forgot-password" className="footer-link">Forgot password?</a>
-          </p>
+        <div className="login-links">
+          <a href="/forgot-password">Forgot Password?</a>
+          <a href="/register">Don't have an account? Sign Up</a>
         </div>
       </div>
     </div>

@@ -20,7 +20,7 @@ const LoginPage = () => {
       await login(email, password);
       navigate('/dashboard');
     } catch (err) {
-      setError('Failed to log in. Please check your credentials.');
+      setError('Failed to sign in. Please check your credentials.');
       console.error(err);
     } finally {
       setLoading(false);
@@ -30,55 +30,38 @@ const LoginPage = () => {
   return (
     <div className="login-container">
       <div className="login-form-wrapper">
-        <h1 className="login-title">Welcome Back</h1>
-        <p className="login-subtitle">Please sign in to your account</p>
-        
+        <h1 className="login-title">Sign In</h1>
         {error && <div className="login-error">{error}</div>}
-        
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
             <label htmlFor="email">Email Address</label>
             <input
-              id="email"
               type="email"
+              id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="Enter your email"
-              className="form-input"
             />
           </div>
-          
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <input
-              id="password"
               type="password"
+              id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               placeholder="Enter your password"
-              className="form-input"
             />
           </div>
-          
-          <button 
-            type="submit" 
-            className="login-button"
-            disabled={loading}
-          >
-            {loading ? 'Signing in...' : 'Sign In'}
+          <button type="submit" disabled={loading} className="login-button">
+            {loading ? 'Signing In...' : 'Sign In'}
           </button>
         </form>
-        
-        <div className="login-footer">
-          <p>
-            Don't have an account?{' '}
-            <a href="/register" className="footer-link">Sign up</a>
-          </p>
-          <p>
-            <a href="/forgot-password" className="footer-link">Forgot password?</a>
-          </p>
+        <div className="login-links">
+          <a href="/forgot-password">Forgot Password?</a>
+          <a href="/register">Don't have an account? Sign Up</a>
         </div>
       </div>
     </div>
@@ -94,127 +77,105 @@ export default LoginPage;
   justify-content: flex-start;
   align-items: flex-start;
   min-height: 100vh;
-  padding: 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+  background-color: #f5f5f5;
 }
 
 .login-form-wrapper {
-  background: white;
-  padding: 2.5rem;
-  border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 420px;
-  margin: 0;
+  max-width: 400px;
 }
 
 .login-title {
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 28px;
+  font-weight: 600;
   color: #333;
-  margin-bottom: 0.5rem;
-}
-
-.login-subtitle {
-  color: #666;
-  margin-bottom: 2rem;
-  font-size: 1rem;
+  margin-bottom: 24px;
 }
 
 .login-error {
   background-color: #fee;
   color: #c33;
-  padding: 0.75rem;
-  border-radius: 6px;
-  margin-bottom: 1.5rem;
-  border: 1px solid #fcc;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  font-size: 14px;
 }
 
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 20px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 8px;
 }
 
 .form-group label {
+  font-size: 14px;
   font-weight: 500;
-  color: #444;
-  font-size: 0.9rem;
+  color: #555;
 }
 
-.form-input {
-  padding: 0.75rem 1rem;
+.form-group input {
+  padding: 12px;
   border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 1rem;
-  transition: border-color 0.2s;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: border-color 0.3s;
 }
 
-.form-input:focus {
+.form-group input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
 .login-button {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-color: #007bff;
   color: white;
   border: none;
-  padding: 0.875rem;
-  border-radius: 6px;
-  font-size: 1rem;
+  padding: 14px;
+  border-radius: 4px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  margin-top: 0.5rem;
+  transition: background-color 0.3s;
+  margin-top: 10px;
 }
 
 .login-button:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+  background-color: #0056b3;
 }
 
 .login-button:disabled {
-  opacity: 0.6;
+  background-color: #ccc;
   cursor: not-allowed;
 }
 
-.login-footer {
-  margin-top: 2rem;
-  text-align: center;
-  color: #666;
-  font-size: 0.9rem;
+.login-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+  font-size: 14px;
 }
 
-.login-footer p {
-  margin: 0.5rem 0;
-}
-
-.footer-link {
-  color: #667eea;
+.login-links a {
+  color: #007bff;
   text-decoration: none;
-  font-weight: 500;
+  transition: color 0.3s;
 }
 
-.footer-link:hover {
+.login-links a:hover {
+  color: #0056b3;
   text-decoration: underline;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .login-container {
-    padding: 1rem;
-  }
-  
-  .login-form-wrapper {
-    padding: 2rem;
-    max-width: 100%;
-  }
 }
 ```
