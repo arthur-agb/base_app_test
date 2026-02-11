@@ -13,14 +13,15 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+    setLoading(true);
+
     try {
-      setError('');
-      setLoading(true);
       await login(email, password);
       navigate('/dashboard');
     } catch (err) {
       setError('Failed to log in. Please check your credentials.');
-      console.error(err);
+      console.error('Login error:', err);
     } finally {
       setLoading(false);
     }
@@ -42,8 +43,9 @@ const LoginPage = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              required
               placeholder="Enter your email"
+              required
+              disabled={loading}
             />
           </div>
           
@@ -54,8 +56,9 @@ const LoginPage = () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              required
               placeholder="Enter your password"
+              required
+              disabled={loading}
             />
           </div>
           
@@ -74,6 +77,7 @@ const LoginPage = () => {
             <button 
               className="link-button"
               onClick={() => navigate('/register')}
+              disabled={loading}
             >
               Sign up here
             </button>
@@ -82,6 +86,7 @@ const LoginPage = () => {
             <button 
               className="link-button"
               onClick={() => navigate('/forgot-password')}
+              disabled={loading}
             >
               Forgot your password?
             </button>
