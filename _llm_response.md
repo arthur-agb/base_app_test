@@ -14,6 +14,7 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     try {
       setError('');
       setLoading(true);
@@ -21,7 +22,7 @@ const LoginPage = () => {
       navigate('/dashboard');
     } catch (err) {
       setError('Failed to log in. Please check your credentials.');
-      console.error(err);
+      console.error('Login error:', err);
     } finally {
       setLoading(false);
     }
@@ -37,27 +38,29 @@ const LoginPage = () => {
         
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
-            <label htmlFor="email">Email Address</label>
+            <label htmlFor="email" className="form-label">Email Address</label>
             <input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              required
+              className="form-input"
               placeholder="Enter your email"
+              required
               disabled={loading}
             />
           </div>
           
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password" className="form-label">Password</label>
             <input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              required
+              className="form-input"
               placeholder="Enter your password"
+              required
               disabled={loading}
             />
           </div>
@@ -67,31 +70,14 @@ const LoginPage = () => {
             className="login-button"
             disabled={loading}
           >
-            {loading ? 'Signing in...' : 'Sign In'}
+            {loading ? 'Signing In...' : 'Sign In'}
           </button>
+          
+          <div className="login-links">
+            <a href="/forgot-password" className="login-link">Forgot Password?</a>
+            <a href="/register" className="login-link">Create Account</a>
+          </div>
         </form>
-        
-        <div className="login-footer">
-          <p>
-            Don't have an account?{' '}
-            <button 
-              className="link-button"
-              onClick={() => navigate('/register')}
-              disabled={loading}
-            >
-              Sign up here
-            </button>
-          </p>
-          <p>
-            <button 
-              className="link-button"
-              onClick={() => navigate('/forgot-password')}
-              disabled={loading}
-            >
-              Forgot your password?
-            </button>
-          </p>
-        </div>
       </div>
     </div>
   );
@@ -106,7 +92,7 @@ export default LoginPage;
   justify-content: flex-start;
   align-items: flex-start;
   min-height: 100vh;
-  padding: 2rem;
+  padding: 40px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
@@ -114,59 +100,59 @@ export default LoginPage;
   background: white;
   border-radius: 12px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  padding: 2.5rem;
+  padding: 40px;
   width: 100%;
   max-width: 420px;
-  margin: 0;
+  text-align: left;
 }
 
 .login-title {
-  font-size: 2rem;
+  font-size: 28px;
   font-weight: 700;
-  color: #2d3748;
-  margin-bottom: 0.5rem;
+  color: #333;
+  margin-bottom: 8px;
 }
 
 .login-subtitle {
-  font-size: 1rem;
-  color: #718096;
-  margin-bottom: 2rem;
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 32px;
 }
 
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 24px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 8px;
 }
 
-.form-group label {
-  font-size: 0.875rem;
+.form-label {
+  font-size: 14px;
   font-weight: 600;
-  color: #4a5568;
+  color: #444;
 }
 
-.form-group input {
-  padding: 0.75rem 1rem;
-  border: 2px solid #e2e8f0;
+.form-input {
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
   border-radius: 8px;
-  font-size: 1rem;
-  transition: all 0.2s ease;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  outline: none;
 }
 
-.form-group input:focus {
-  outline: none;
+.form-input:focus {
   border-color: #667eea;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
-.form-group input:disabled {
-  background-color: #f7fafc;
+.form-input:disabled {
+  background-color: #f5f5f5;
   cursor: not-allowed;
 }
 
@@ -175,21 +161,17 @@ export default LoginPage;
   color: white;
   border: none;
   border-radius: 8px;
-  padding: 0.875rem;
-  font-size: 1rem;
+  padding: 14px 24px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
-  margin-top: 0.5rem;
+  transition: all 0.3s ease;
+  margin-top: 8px;
 }
 
 .login-button:hover:not(:disabled) {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
   box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-}
-
-.login-button:active:not(:disabled) {
-  transform: translateY(0);
 }
 
 .login-button:disabled {
@@ -198,53 +180,51 @@ export default LoginPage;
 }
 
 .login-error {
-  background-color: #fed7d7;
-  border: 1px solid #fc8181;
-  color: #c53030;
-  padding: 0.75rem 1rem;
+  background-color: #fee;
+  color: #c33;
+  padding: 12px 16px;
   border-radius: 8px;
-  margin-bottom: 1.5rem;
-  font-size: 0.875rem;
+  border: 1px solid #fcc;
+  margin-bottom: 24px;
+  font-size: 14px;
 }
 
-.login-footer {
-  margin-top: 2rem;
-  text-align: center;
-  color: #718096;
-  font-size: 0.875rem;
+.login-links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #eee;
 }
 
-.link-button {
-  background: none;
-  border: none;
+.login-link {
   color: #667eea;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 0;
-  font-size: inherit;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.login-link:hover {
+  color: #764ba2;
   text-decoration: underline;
 }
 
-.link-button:hover:not(:disabled) {
-  color: #5a67d8;
-}
-
-.link-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-@media (max-width: 640px) {
+/* Responsive adjustments */
+@media (max-width: 768px) {
   .login-container {
-    padding: 1rem;
+    padding: 20px;
   }
   
   .login-form-wrapper {
-    padding: 1.5rem;
+    padding: 30px;
+    max-width: 100%;
   }
   
-  .login-title {
-    font-size: 1.5rem;
+  .login-links {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
   }
 }
 ```

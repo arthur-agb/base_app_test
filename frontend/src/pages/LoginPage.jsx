@@ -13,6 +13,7 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     try {
       setError('');
       setLoading(true);
@@ -20,7 +21,7 @@ const LoginPage = () => {
       navigate('/dashboard');
     } catch (err) {
       setError('Failed to log in. Please check your credentials.');
-      console.error(err);
+      console.error('Login error:', err);
     } finally {
       setLoading(false);
     }
@@ -36,27 +37,29 @@ const LoginPage = () => {
         
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
-            <label htmlFor="email">Email Address</label>
+            <label htmlFor="email" className="form-label">Email Address</label>
             <input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              required
+              className="form-input"
               placeholder="Enter your email"
+              required
               disabled={loading}
             />
           </div>
           
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password" className="form-label">Password</label>
             <input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              required
+              className="form-input"
               placeholder="Enter your password"
+              required
               disabled={loading}
             />
           </div>
@@ -66,31 +69,14 @@ const LoginPage = () => {
             className="login-button"
             disabled={loading}
           >
-            {loading ? 'Signing in...' : 'Sign In'}
+            {loading ? 'Signing In...' : 'Sign In'}
           </button>
+          
+          <div className="login-links">
+            <a href="/forgot-password" className="login-link">Forgot Password?</a>
+            <a href="/register" className="login-link">Create Account</a>
+          </div>
         </form>
-        
-        <div className="login-footer">
-          <p>
-            Don't have an account?{' '}
-            <button 
-              className="link-button"
-              onClick={() => navigate('/register')}
-              disabled={loading}
-            >
-              Sign up here
-            </button>
-          </p>
-          <p>
-            <button 
-              className="link-button"
-              onClick={() => navigate('/forgot-password')}
-              disabled={loading}
-            >
-              Forgot your password?
-            </button>
-          </p>
-        </div>
       </div>
     </div>
   );
