@@ -1,0 +1,19 @@
+# Application dependencies for startup and verification
+
+# Core dependencies
+python>=3.8
+
+# UI dependencies (optional)
+tkinter  # Usually included with Python
+
+# Testing dependencies
+pytest>=7.0.0
+pytest-cov>=4.0.0
+
+# Development dependencies
+black>=22.0.0
+flake8>=5.0.0
+mypy>=0.991
+
+# Runtime dependencies
+# (Add any additional dependencies your application needs)
