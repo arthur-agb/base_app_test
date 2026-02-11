@@ -21,6 +21,7 @@ const LoginPage = () => {
       navigate('/dashboard');
     } catch (err) {
       setError('Failed to log in. Please check your credentials.');
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -44,6 +45,7 @@ const LoginPage = () => {
               onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="Enter your email"
+              className="form-input"
             />
           </div>
           
@@ -56,6 +58,7 @@ const LoginPage = () => {
               onChange={(e) => setPassword(e.target.value)}
               required
               placeholder="Enter your password"
+              className="form-input"
             />
           </div>
           
@@ -71,14 +74,10 @@ const LoginPage = () => {
         <div className="login-footer">
           <p>
             Don't have an account?{' '}
-            <a href="/register" className="register-link">
-              Create one here
-            </a>
+            <a href="/register" className="footer-link">Sign up</a>
           </p>
           <p>
-            <a href="/forgot-password" className="forgot-password-link">
-              Forgot your password?
-            </a>
+            <a href="/forgot-password" className="footer-link">Forgot password?</a>
           </p>
         </div>
       </div>
@@ -95,60 +94,69 @@ export default LoginPage;
   justify-content: flex-start;
   align-items: flex-start;
   min-height: 100vh;
-  padding: 40px;
+  padding: 2rem;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 .login-form-wrapper {
   background: white;
-  padding: 40px;
+  padding: 2.5rem;
   border-radius: 12px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 420px;
-  text-align: left;
+  margin: 0;
 }
 
 .login-title {
-  font-size: 32px;
+  font-size: 2rem;
   font-weight: 700;
   color: #333;
-  margin-bottom: 8px;
+  margin-bottom: 0.5rem;
 }
 
 .login-subtitle {
-  font-size: 16px;
   color: #666;
-  margin-bottom: 32px;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+}
+
+.login-error {
+  background-color: #fee;
+  color: #c33;
+  padding: 0.75rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  border: 1px solid #fcc;
 }
 
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 1.5rem;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0.5rem;
 }
 
 .form-group label {
-  font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   color: #444;
+  font-size: 0.9rem;
 }
 
-.form-group input {
-  padding: 14px 16px;
-  border: 2px solid #e1e5e9;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: border-color 0.2s ease;
+.form-input {
+  padding: 0.75rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
 }
 
-.form-group input:focus {
+.form-input:focus {
   outline: none;
   border-color: #667eea;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
@@ -158,18 +166,18 @@ export default LoginPage;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
-  padding: 16px;
-  border-radius: 8px;
-  font-size: 16px;
+  padding: 0.875rem;
+  border-radius: 6px;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  margin-top: 8px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-top: 0.5rem;
 }
 
 .login-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
 }
 
 .login-button:disabled {
@@ -177,53 +185,36 @@ export default LoginPage;
   cursor: not-allowed;
 }
 
-.login-error {
-  background-color: #fee;
-  color: #c33;
-  padding: 12px 16px;
-  border-radius: 8px;
-  border-left: 4px solid #c33;
-  margin-bottom: 24px;
-  font-size: 14px;
-}
-
 .login-footer {
-  margin-top: 32px;
-  padding-top: 24px;
-  border-top: 1px solid #eee;
-  font-size: 14px;
+  margin-top: 2rem;
+  text-align: center;
   color: #666;
+  font-size: 0.9rem;
 }
 
 .login-footer p {
-  margin: 8px 0;
+  margin: 0.5rem 0;
 }
 
-.register-link,
-.forgot-password-link {
+.footer-link {
   color: #667eea;
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 500;
 }
 
-.register-link:hover,
-.forgot-password-link:hover {
+.footer-link:hover {
   text-decoration: underline;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .login-container {
-    padding: 20px;
+    padding: 1rem;
   }
   
   .login-form-wrapper {
-    padding: 30px;
+    padding: 2rem;
     max-width: 100%;
-  }
-  
-  .login-title {
-    font-size: 28px;
   }
 }
 ```

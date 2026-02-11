@@ -20,6 +20,7 @@ const LoginPage = () => {
       navigate('/dashboard');
     } catch (err) {
       setError('Failed to log in. Please check your credentials.');
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -43,6 +44,7 @@ const LoginPage = () => {
               onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="Enter your email"
+              className="form-input"
             />
           </div>
           
@@ -55,6 +57,7 @@ const LoginPage = () => {
               onChange={(e) => setPassword(e.target.value)}
               required
               placeholder="Enter your password"
+              className="form-input"
             />
           </div>
           
@@ -70,14 +73,10 @@ const LoginPage = () => {
         <div className="login-footer">
           <p>
             Don't have an account?{' '}
-            <a href="/register" className="register-link">
-              Create one here
-            </a>
+            <a href="/register" className="footer-link">Sign up</a>
           </p>
           <p>
-            <a href="/forgot-password" className="forgot-password-link">
-              Forgot your password?
-            </a>
+            <a href="/forgot-password" className="footer-link">Forgot password?</a>
           </p>
         </div>
       </div>
