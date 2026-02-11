@@ -1,19 +1,21 @@
 """
-Theme manager for handling global theme updates.
+Theme manager for handling global theme changes.
 """
 import json
 import os
-from typing import Dict, Optional, Any
-from .palette import ColorPalette
+from typing import Optional, Dict, Any
+from pathlib import Path
+
+from .palette import Palette, PALETTES
 
 
 class ThemeManager:
     """
-    Manages application themes and color palettes.
+    Manages application theme and color palette.
     
     Attributes:
-        current_palette: Currently active color palette
-        available_palettes: Dictionary of available palettes
+        current_palette: Currently active palette
+        config_path: Path to theme configuration file
     """
     
     def __init__(self, config_path: Optional[str] = None):
@@ -21,152 +23,165 @@ class ThemeManager:
         Initialize theme manager.
         
         Args:
-            config_path: Path to theme configuration file
+            config_path: Path to theme configuration file. 
+                        Defaults to ~/.app/theme_config.json
         """
-        self.config_path = config_path or "theme_config.json"
-        self.current_palette: ColorPalette = ColorPalette.get_default_palette()
-        self.available_palettes: Dict[str, ColorPalette] = {
-            "default": ColorPalette.get_default_palette(),
-            "dark": ColorPalette.get_dark_palette(),
-            "vibrant": ColorPalette.get_vibrant_palette(),
-        }
-        self._load_config()
-    
-    def _load_config(self) -> None:
-        """Load theme configuration from file."""
-        if os.path.exists(self.config_path):
-            try:
-                with open(self.config_path, 'r') as f:
-                    config = json.load(f)
-                    palette_name = config.get("current_palette", "default")
-                    self.set_palette(palette_name)
-            except (json.JSONDecodeError, IOError):
-                # If config is corrupted, use default
-                self.current_palette = ColorPalette.get_default_palette()
-    
-    def _save_config(self) -> None:
-        """Save theme configuration to file."""
-        config = {
-            "current_palette": self.get_current_palette_name(),
-            "available_palettes": list(self.available_palettes.keys())
-        }
+        if config_path is None:
+            config_dir = Path.home() / ".app"
+            config_dir.mkdir(exist_ok=True)
+            self.config_path = config_dir / "theme_config.json"
+        else:
+            self.config_path = Path(config_path)
         
-        try:
-            with open(self.config_path, 'w') as f:
-                json.dump(config, f, indent=2)
-        except IOError:
-            # Silently fail if we can't save config
-            pass
+        # Load saved palette or use modern_dark as default
+        self.current_palette = self._load_saved_palette() or PALETTES["modern_dark"]
     
     def set_palette(self, palette_name: str) -> bool:
         """
-        Set the current color palette.
+        Set the active palette by name.
         
         Args:
-            palette_name: Name of the palette to set
+            palette_name: Name of the palette (modern_dark, vibrant, default)
             
         Returns:
             True if palette was set successfully, False otherwise
         """
-        if palette_name not in self.available_palettes:
+        if palette_name not in PALETTES:
             return False
         
-        self.current_palette = self.available_palettes[palette_name]
-        self._save_config()
+        self.current_palette = PALETTES[palette_name]
+        self._save_palette()
+        self._apply_palette()
         return True
     
-    def get_current_palette_name(self) -> str:
+    def set_custom_palette(self, palette: Palette) -> None:
         """
-        Get the name of the current palette.
-        
-        Returns:
-            Name of the current palette
-        """
-        for name, palette in self.available_palettes.items():
-            if palette == self.current_palette:
-                return name
-        return "default"
-    
-    def get_palette(self, name: str) -> Optional[ColorPalette]:
-        """
-        Get a palette by name.
+        Set a custom palette.
         
         Args:
-            name: Name of the palette
-            
-        Returns:
-            ColorPalette if found, None otherwise
+            palette: Custom palette instance
         """
-        return self.available_palettes.get(name)
+        self.current_palette = palette
+        self._save_palette()
+        self._apply_palette()
     
-    def add_custom_palette(self, name: str, palette: ColorPalette) -> None:
+    def get_palette(self) -> Palette:
         """
-        Add a custom palette.
-        
-        Args:
-            name: Name for the custom palette
-            palette: ColorPalette instance
-        """
-        self.available_palettes[name] = palette
-    
-    def remove_calette(self, name: str) -> bool:
-        """
-        Remove a palette.
-        
-        Args:
-            name: Name of the palette to remove
-            
-        Returns:
-            True if removed, False if not found or is default/dark/vibrant
-        """
-        if name in ["default", "dark", "vibrant"]:
-            return False
-        
-        if name in self.available_palettes:
-            del self.available_palettes[name]
-            
-            # If current palette was removed, fall back to default
-            if self.get_current_palette_name() == name:
-                self.set_palette("default")
-            
-            return True
-        
-        return False
-    
-    def get_all_palettes(self) -> Dict[str, Dict[str, str]]:
-        """
-        Get all available palettes as dictionaries.
+        Get the current palette.
         
         Returns:
-            Dictionary of palette names to palette dictionaries
+            Current palette instance
         """
-        return {name: palette.to_dict() for name, palette in self.available_palettes.items()}
+        return self.current_palette
+    
+    def get_available_palettes(self) -> Dict[str, Palette]:
+        """
+        Get all available palettes.
+        
+        Returns:
+            Dictionary of palette names to palette instances
+        """
+        return PALETTES.copy()
+    
+    def _load_saved_palette(self) -> Optional[Palette]:
+        """
+        Load saved palette from configuration file.
+        
+        Returns:
+            Palette instance if found, None otherwise
+        """
+        try:
+            if self.config_path.exists():
+                with open(self.config_path, 'r') as f:
+                    data = json.load(f)
+                
+                # Check if it's a custom palette or named palette
+                if "palette_name" in data:
+                    palette_name = data["palette_name"]
+                    if palette_name in PALETTES:
+                        return PALETTES[palette_name]
+                elif "primary" in data:  # Custom palette
+                    return Palette.from_dict(data)
+        except (json.JSONDecodeError, KeyError, IOError):
+            pass
+        
+        return None
+    
+    def _save_palette(self) -> None:
+        """
+        Save current palette to configuration file.
+        """
+        try:
+            # Check if it's a predefined palette
+            palette_name = None
+            for name, palette in PALETTES.items():
+                if palette == self.current_palette:
+                    palette_name = name
+                    break
+            
+            if palette_name:
+                data = {"palette_name": palette_name}
+            else:
+                data = self.current_palette.to_dict()
+            
+            with open(self.config_path, 'w') as f:
+                json.dump(data, f, indent=2)
+        except IOError:
+            pass
+    
+    def _apply_palette(self) -> None:
+        """
+        Apply the current palette globally.
+        This method should be called by the UI framework to update colors.
+        """
+        # This is a stub that should be implemented by the UI framework
+        # For example, in a web app, this would update CSS variables
+        # In a desktop app, this would update style sheets
+        pass
     
     def generate_css_variables(self) -> str:
         """
-        Generate CSS variables for the current palette.
+        Generate CSS variables for web applications.
         
         Returns:
-            CSS string with variables
+            CSS string with color variables
         """
-        palette_dict = self.current_palette.to_dict()
-        css_vars = []
+        palette = self.current_palette
+        variables = [
+            f"--color-primary: {palette.primary};",
+            f"--color-secondary: {palette.secondary};",
+            f"--color-accent: {palette.accent};",
+            f"--color-background: {palette.background};",
+            f"--color-surface: {palette.surface};",
+            f"--color-error: {palette.error};",
+            f"--color-success: {palette.success};",
+            f"--color-warning: {palette.warning};",
+            f"--color-info: {palette.info};",
+            f"--color-on-primary: {palette.on_primary};",
+            f"--color-on-secondary: {palette.on_secondary};",
+            f"--color-on-background: {palette.on_background};",
+            f"--color-on-surface: {palette.on_surface};",
+            f"--color-on-error: {palette.on_error};",
+        ]
         
-        for key, value in palette_dict.items():
-            css_var_name = f"--color-{key.replace('_', '-')}"
-            css_vars.append(f"{css_var_name}: {value};")
-        
-        return ":root {\n  " + "\n  ".join(css_vars) + "\n}"
+        return ":root {\n  " + "\n  ".join(variables) + "\n}"
     
-    def generate_theme_object(self) -> Dict[str, Any]:
+    def generate_style_dict(self) -> Dict[str, Dict[str, str]]:
         """
-        Generate a theme object for JavaScript/TypeScript.
+        Generate style dictionary for desktop/mobile applications.
         
         Returns:
-            Dictionary with theme data
+            Dictionary with style properties
         """
+        palette = self.current_palette
         return {
-            "current": self.get_current_palette_name(),
-            "palette": self.current_palette.to_dict(),
-            "available": list(self.available_palettes.keys())
+            "primary": {"color": palette.primary, "text_color": palette.on_primary},
+            "secondary": {"color": palette.secondary, "text_color": palette.on_secondary},
+            "accent": {"color": palette.accent},
+            "background": {"color": palette.background, "text_color": palette.on_background},
+            "surface": {"color": palette.surface, "text_color": palette.on_surface},
+            "error": {"color": palette.error, "text_color": palette.on_error},
+            "success": {"color": palette.success},
+            "warning": {"color": palette.warning},
+            "info": {"color": palette.info},
         }

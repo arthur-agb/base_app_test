@@ -1,7 +1,7 @@
 """
 Theme module initialization.
 """
-from .palette import ColorPalette
+from .palette import Palette
 from .theme_manager import ThemeManager
 
-__all__ = ["ColorPalette", "ThemeManager"]
+__all__ = ["Palette", "ThemeManager"]

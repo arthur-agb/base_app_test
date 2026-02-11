@@ -1,6 +1,10 @@
 """
-Application package initialization.
+Base Application Test Package
 """
-from .theme import ThemeManager, ColorPalette
+from app.config.theme_config import get_theme_manager
 
-__all__ = ["ThemeManager", "ColorPalette"]
+# Initialize theme manager on import
+theme_manager = get_theme_manager()
+
+__version__ = "1.0.0"
+__all__ = ["theme_manager"]
