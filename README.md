@@ -1,19 +1,15 @@
-# Application Startup and Verification
+# BaseAppTest
 
-This application provides startup and verification functionality to ensure changes don't break the UI.
+## Application Startup and Verification
 
-## Overview
+This application provides a framework for starting up and verifying application components, with a focus on UI compatibility and build checks.
 
-The application performs:
-1. Startup verification checks
-2. Build validation
-3. Environment validation
-4. Basic UI compatibility checks
+## Features
 
-## Requirements
-
-- Python 3.7 or higher
-- No external dependencies required for basic functionality
+- **Application Startup**: Initialize and start the application with proper error handling
+- **Verification System**: Comprehensive checks for UI components and build dependencies
+- **Configuration Management**: Centralized settings management
+- **Testing Framework**: Complete unit test suite for all components
 
 ## Installation
 

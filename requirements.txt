@@ -1,13 +1,22 @@
 # Application dependencies
-# This file lists all Python package dependencies
+# This file lists all Python dependencies for the application
 
 # Core dependencies
-# No external dependencies required for basic functionality
+python>=3.7
 
-# Development dependencies (optional)
-# pytest>=6.0.0
-# black>=21.0.0
-# flake8>=3.9.0
-# mypy>=0.900
+# UI/Web framework (placeholder for actual UI framework)
+# flask>=2.0.0
+# django>=4.0.0
 
-# Runtime dependencies would be listed here if needed
+# Testing dependencies
+pytest>=6.0.0
+pytest-cov>=3.0.0
+
+# Development dependencies
+black>=22.0.0
+flake8>=4.0.0
+mypy>=0.900
+
+# Utility libraries
+requests>=2.25.0
+python-dotenv>=0.19.0
