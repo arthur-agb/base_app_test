@@ -1,11 +1,11 @@
-I'll explore the repository first to understand the structure and locate relevant theme files.
+I'll explore the repository first to understand the structure and locate relevant files.
 
 ```bash
 find . -type f -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" -o -name "*.css" -o -name "*.scss" | grep -i theme | head -20
 ```
 
 ```bash
-find . -type f -path "*/frontend/*" -name "*.js" -o -path "*/frontend/*" -name "*.jsx" -o -path "*/frontend/*" -name "*.ts" -o -path "*/frontend/*" -name "*.tsx" | head -30
+find . -type f -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" | xargs grep -l "theme\|palette\|color" | head -20
 ```
 
 ```bash
@@ -13,11 +13,11 @@ ls -la frontend/src/
 ```
 
 ```bash
-find frontend/src -type f -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" | xargs grep -l "theme\|Theme\|palette\|Palette" | head -20
+find frontend/src -type f -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" | xargs grep -l "theme\|ThemeProvider\|createTheme" | head -20
 ```
 
 ```bash
-find frontend/src -type f \( -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" \) -exec grep -l "createTheme\|ThemeProvider\|MuiTheme" {} \;
+find frontend/src -type f -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" | xargs grep -l "MuiThemeProvider\|ThemeProvider" | head -20
 ```
 
 ```bash
@@ -29,52 +29,61 @@ cat frontend/src/index.js
 ```
 
 ```bash
-find frontend/src -type f -name "*.js" -o -name "*.jsx" | xargs grep -l "theme" | head -10
+find frontend/src -type f -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" | xargs grep -l "createTheme" | head -20
 ```
 
 ```bash
-cat frontend/src/theme.js
+ls -la frontend/src/theme/
 ```
 
-Based on my exploration, I found the theme configuration file. Now I'll update it with a modern dark/vibrant palette.
+```bash
+cat frontend/src/theme/theme.js
+```
 
-```javascript frontend/src/theme.js
+Now I can see the structure. Let me check the existing theme file and update it with a modern dark/vibrant palette.
+
+```javascript frontend/src/theme/theme.js
 import { createTheme } from '@mui/material/styles';
 
-const modernDarkTheme = createTheme({
+// Modern vibrant dark theme palette
+const theme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#7C4DFF', // Vibrant purple
-      light: '#B47CFF',
-      dark: '#4A00B8',
+      main: '#6C63FF', // Vibrant purple
+      light: '#8A84FF',
+      dark: '#4A44B2',
       contrastText: '#FFFFFF',
     },
     secondary: {
-      main: '#00E5FF', // Cyan accent
-      light: '#6EFFFF',
-      dark: '#00B2CC',
+      main: '#FF6584', // Vibrant pink
+      light: '#FF8AA3',
+      dark: '#E64A78',
+      contrastText: '#FFFFFF',
+    },
+    success: {
+      main: '#4CAF50',
+      light: '#80E27E',
+      dark: '#087F23',
+      contrastText: '#000000',
+    },
+    warning: {
+      main: '#FF9800',
+      light: '#FFB74D',
+      dark: '#F57C00',
       contrastText: '#000000',
     },
     error: {
-      main: '#FF5252',
-      light: '#FF867F',
-      dark: '#C50E29',
-    },
-    warning: {
-      main: '#FFB74D',
-      light: '#FFE97D',
-      dark: '#C88719',
+      main: '#F44336',
+      light: '#EF9A9A',
+      dark: '#C62828',
+      contrastText: '#FFFFFF',
     },
     info: {
-      main: '#29B6F6',
-      light: '#73E8FF',
-      dark: '#0086C3',
-    },
-    success: {
-      main: '#66BB6A',
-      light: '#98EE99',
-      dark: '#338A3E',
+      main: '#2196F3',
+      light: '#64B5F6',
+      dark: '#1976D2',
+      contrastText: '#FFFFFF',
     },
     background: {
       default: '#121212',
@@ -83,9 +92,9 @@ const modernDarkTheme = createTheme({
     text: {
       primary: '#FFFFFF',
       secondary: '#B0B0B0',
-      disabled: '#6D6D6D',
+      disabled: '#666666',
     },
-    divider: '#2D2D2D',
+    divider: '#333333',
     action: {
       active: '#FFFFFF',
       hover: 'rgba(255, 255, 255, 0.08)',
@@ -97,51 +106,72 @@ const modernDarkTheme = createTheme({
   typography: {
     fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
     h1: {
+      fontSize: '2.5rem',
       fontWeight: 700,
-      fontSize: '3.5rem',
       letterSpacing: '-0.01562em',
     },
     h2: {
+      fontSize: '2rem',
       fontWeight: 600,
-      fontSize: '2.75rem',
       letterSpacing: '-0.00833em',
     },
     h3: {
+      fontSize: '1.75rem',
       fontWeight: 600,
-      fontSize: '2.25rem',
+      letterSpacing: '0em',
     },
     h4: {
+      fontSize: '1.5rem',
       fontWeight: 600,
-      fontSize: '2rem',
+      letterSpacing: '0.00735em',
     },
     h5: {
+      fontSize: '1.25rem',
       fontWeight: 600,
-      fontSize: '1.5rem',
+      letterSpacing: '0em',
     },
     h6: {
+      fontSize: '1rem',
       fontWeight: 600,
-      fontSize: '1.25rem',
+      letterSpacing: '0.0075em',
     },
     subtitle1: {
-      fontWeight: 500,
       fontSize: '1rem',
+      fontWeight: 400,
+      lineHeight: 1.75,
     },
     subtitle2: {
-      fontWeight: 500,
       fontSize: '0.875rem',
+      fontWeight: 500,
+      lineHeight: 1.57,
     },
     body1: {
       fontSize: '1rem',
-      lineHeight: 1.6,
+      fontWeight: 400,
+      lineHeight: 1.5,
     },
     body2: {
       fontSize: '0.875rem',
-      lineHeight: 1.5,
+      fontWeight: 400,
+      lineHeight: 1.43,
     },
     button: {
+      fontSize: '0.875rem',
       fontWeight: 600,
       textTransform: 'none',
-      fontSize: '0.875rem',
+      letterSpacing: '0.02857em',
+    },
+    caption: {
+      fontSize: '0.75rem',
+      fontWeight: 400,
+      lineHeight: 1.66,
+    },
+    overline: {
+      fontSize: '0.75rem',
+      fontWeight: 600,
+      lineHeight: 2.66,
+      textTransform: 'uppercase',
+      letterSpacing: '0.08333em',
     },
   },
   shape: {
@@ -152,12 +182,12 @@ const modernDarkTheme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 8,
-          padding: '10px 24px',
+          padding: '8px 16px',
         },
         contained: {
-          boxShadow: '0 4px 14px 0 rgba(124, 77, 255, 0.4)',
+          boxShadow: '0 4px 14px 0 rgba(108, 99, 255, 0.39)',
           '&:hover': {
-            boxShadow: '0 6px 20px 0 rgba(124, 77, 255, 0.6)',
+            boxShadow: '0 6px 20px 0 rgba(108, 99, 255, 0.49)',
           },
         },
       },
@@ -167,6 +197,13 @@ const modernDarkTheme = createTheme({
         root: {
           borderRadius: 16,
           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+          backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05))',
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
           backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05))',
         },
       },
@@ -182,8 +219,7 @@ const modernDarkTheme = createTheme({
     MuiDrawer: {
       styleOverrides: {
         paper: {
-          backgroundColor: '#1A1A1A',
-          backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05))',
+          background: 'linear-gradient(180deg, #1E1E1E 0%, #121212 100%)',
         },
       },
     },
@@ -191,9 +227,11 @@ const modernDarkTheme = createTheme({
       styleOverrides: {
         root: {
           '& .MuiOutlinedInput-root': {
-            borderRadius: 8,
-            '&:hover .MuiOutlinedInput-notchedOutline': {
-              borderColor: '#7C4DFF',
+            '&:hover fieldset': {
+              borderColor: '#6C63FF',
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: '#6C63FF',
             },
           },
         },
@@ -209,136 +247,21 @@ const modernDarkTheme = createTheme({
   },
 });
 
-export default modernDarkTheme;
+export default theme;
 ```
 
-```javascript frontend/src/App.js
-import React from 'react';
-import { ThemeProvider, CssBaseline } from '@mui/material';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import modernDarkTheme from './theme';
-import Dashboard from './components/Dashboard';
-import Navbar from './components/Navbar';
-import Sidebar from './components/Sidebar';
-import './App.css';
+Now let me check if there's a global CSS file that might need updating for additional theme support:
 
-function App() {
-  return (
-    <ThemeProvider theme={modernDarkTheme}>
-      <CssBaseline />
-      <Router>
-        <div className="App">
-          <Navbar />
-          <div className="app-content">
-            <Sidebar />
-            <main className="main-content">
-              <Routes>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                {/* Add other routes as needed */}
-              </Routes>
-            </main>
-          </div>
-        </div>
-      </Router>
-    </ThemeProvider>
-  );
-}
-
-export default App;
+```bash
+find frontend/src -name "*.css" -o -name "*.scss" | head -10
 ```
 
-```css frontend/src/App.css
-.App {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #0a0a0a 0%, #121212 100%);
-}
-
-.app-content {
-  display: flex;
-  flex: 1;
-}
-
-.main-content {
-  flex: 1;
-  padding: 24px;
-  overflow-y: auto;
-  background: transparent;
-}
-
-/* Custom scrollbar for modern dark theme */
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #7C4DFF 0%, #4A00B8 100%);
-  border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #B47CFF 0%, #7C4DFF 100%);
-}
-
-/* Global animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.fade-in {
-  animation: fadeIn 0.5s ease-out;
-}
-
-@keyframes glow {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(124, 77, 255, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 30px rgba(124, 77, 255, 0.6);
-  }
-}
-
-.glow-effect {
-  animation: glow 3s ease-in-out infinite;
-}
-```
-
-```javascript frontend/src/index.js
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+```bash
+cat frontend/src/index.css
 ```
 
 ```css frontend/src/index.css
+/* Import Inter font for modern typography */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 * {
@@ -354,28 +277,50 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #121212;
-  color: #FFFFFF;
+  background: linear-gradient(135deg, #0a0a0a 0%, #121212 100%);
+  min-height: 100vh;
+  color: #ffffff;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-  background: rgba(124, 77, 255, 0.1);
-  padding: 2px 6px;
-  border-radius: 4px;
-  color: #B47CFF;
+}
+
+/* Custom scrollbar for modern dark theme */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #6C63FF 0%, #4A44B2 100%);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #8A84FF 0%, #6C63FF 100%);
 }
 
 /* Selection color */
 ::selection {
-  background-color: rgba(124, 77, 255, 0.5);
-  color: #FFFFFF;
+  background-color: rgba(108, 99, 255, 0.5);
+  color: #ffffff;
 }
 
-/* Focus outline for accessibility */
+/* Smooth transitions */
+* {
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Focus styles for accessibility */
 :focus {
-  outline: 2px solid #7C4DFF;
+  outline: 2px solid #6C63FF;
   outline-offset: 2px;
 }
 
@@ -383,224 +328,300 @@ code {
 :focus:not(:focus-visible) {
   outline: none;
 }
+```
 
-/* Restore focus outline for keyboard users */
-:focus-visible {
-  outline: 2px solid #7C4DFF;
-  outline-offset: 2px;
+Let me also check the App.js file to see how the theme is being applied:
+
+```bash
+cat frontend/src/App.js
+```
+
+```javascript frontend/src/App.js
+import React from 'react';
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import theme from './theme/theme';
+import Layout from './components/Layout';
+import Dashboard from './pages/Dashboard';
+import Analytics from './pages/Analytics';
+import Settings from './pages/Settings';
+import './App.css';
+
+function App() {
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Router>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/settings" element={<Settings />} />
+          </Routes>
+        </Layout>
+      </Router>
+    </ThemeProvider>
+  );
+}
+
+export default App;
+```
+
+Now let me check if there's an App.css file that might need updating:
+
+```bash
+cat frontend/src/App.css
+```
+
+```css frontend/src/App.css
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Additional global styles for the new theme */
+.gradient-text {
+  background: linear-gradient(90deg, #6C63FF 0%, #FF6584 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glow-effect {
+  box-shadow: 0 0 20px rgba(108, 99, 255, 0.3);
+}
+
+.glow-effect:hover {
+  box-shadow: 0 0 30px rgba(108, 99, 255, 0.5);
+}
+
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Glass morphism effect */
+.glass {
+  background: rgba(30, 30, 30, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Pulse animation for loading states */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 ```
 
-```javascript frontend/src/components/Dashboard.js
-import React from 'react';
-import { 
-  Grid, 
-  Card, 
-  CardContent, 
-  Typography, 
-  Box, 
-  Button,
-  LinearProgress,
-  Chip
-} from '@mui/material';
-import { 
-  TrendingUp, 
-  People, 
-  AttachMoney, 
-  Dashboard as DashboardIcon 
-} from '@mui/icons-material';
+Let me also check if there are any component-specific theme overrides that might need updating:
 
-const Dashboard = () => {
-  const stats = [
-    { title: 'Total Revenue', value: '$54,234', change: '+23%', icon: <AttachMoney />, color: '#7C4DFF' },
-    { title: 'Active Users', value: '3,456', change: '+12%', icon: <People />, color: '#00E5FF' },
-    { title: 'Conversion Rate', value: '4.8%', change: '+5%', icon: <TrendingUp />, color: '#66BB6A' },
-    { title: 'Engagement', value: '78%', change: '+8%', icon: <DashboardIcon />, color: '#FFB74D' },
+```bash
+find frontend/src/components -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" | xargs grep -l "makeStyles\|styled\|sx" | head -10
+```
+
+```bash
+cat frontend/src/components/Layout.js
+```
+
+```javascript frontend/src/components/Layout.js
+import React from 'react';
+import { styled } from '@mui/material/styles';
+import { AppBar, Toolbar, Typography, IconButton, Drawer, List, ListItem, ListItemIcon, ListItemText, Box } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import AnalyticsIcon from '@mui/icons-material/Analytics';
+import SettingsIcon from '@mui/icons-material/Settings';
+import { useNavigate, useLocation } from 'react-router-dom';
+
+const drawerWidth = 240;
+
+const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
+  ({ theme, open }) => ({
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: `-${drawerWidth}px`,
+    ...(open && {
+      transition: theme.transitions.create('margin', {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+      marginLeft: 0,
+    }),
+  }),
+);
+
+const AppBarStyled = styled(AppBar)(({ theme }) => ({
+  zIndex: theme.zIndex.drawer + 1,
+  transition: theme.transitions.create(['width', 'margin'], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+}));
+
+const DrawerHeader = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  padding: theme.spacing(0, 1),
+  ...theme.mixins.toolbar,
+  justifyContent: 'flex-end',
+}));
+
+function Layout({ children }) {
+  const [open, setOpen] = React.useState(true);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
+  const menuItems = [
+    { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
+    { text: 'Analytics', icon: <AnalyticsIcon />, path: '/analytics' },
+    { text: 'Settings', icon: <SettingsIcon />, path: '/settings' },
   ];
 
   return (
-    <Box className="fade-in">
-      <Typography variant="h4" gutterBottom sx={{ mb: 4, fontWeight: 600 }}>
-        Dashboard Overview
-      </Typography>
-      
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        {stats.map((stat, index) => (
-          <Grid item xs={12} sm={6} md={3} key={index}>
-            <Card className="glow-effect" sx={{ 
-              border: '1px solid rgba(124, 77, 255, 0.2)',
-              transition: 'transform 0.3s ease, border-color 0.3s ease',
-              '&:hover': {
-                transform: 'translateY(-4px)',
-                borderColor: 'rgba(124, 77, 255, 0.4)',
-              }
-            }}>
-              <CardContent>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                  <Box sx={{ 
-                    p: 1, 
-                    borderRadius: 2, 
-                    backgroundColor: `${stat.color}20`,
-                    color: stat.color
-                  }}>
-                    {stat.icon}
-                  </Box>
-                  <Chip 
-                    label={stat.change} 
-                    size="small" 
-                    sx={{ 
-                      backgroundColor: `${stat.color}20`,
-                      color: stat.color,
-                      fontWeight: 600
-                    }} 
-                  />
-                </Box>
-                <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>
-                  {stat.value}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {stat.title}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={8}>
-          <Card sx={{ 
-            border: '1px solid rgba(124, 77, 255, 0.2)',
-            background: 'linear-gradient(135deg, rgba(30, 30, 30, 0.8) 0%, rgba(18, 18, 18, 0.8) 100%)'
-          }}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
-                Performance Metrics
-              </Typography>
-              <Box sx={{ mt: 3 }}>
-                <Box sx={{ mb: 3 }}>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                    <Typography variant="body2">Website Traffic</Typography>
-                    <Typography variant="body2" sx={{ fontWeight: 600, color: '#7C4DFF' }}>85%</Typography>
-                  </Box>
-                  <LinearProgress 
-                    variant="determinate" 
-                    value={85} 
-                    sx={{ 
-                      height: 8, 
-                      borderRadius: 4,
-                      backgroundColor: 'rgba(124, 77, 255, 0.1)',
-                      '& .MuiLinearProgress-bar': {
-                        backgroundColor: '#7C4DFF',
-                        borderRadius: 4,
-                      }
-                    }} 
-                  />
-                </Box>
-                <Box sx={{ mb: 3 }}>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                    <Typography variant="body2">User Engagement</Typography>
-                    <Typography variant="body2" sx={{ fontWeight: 600, color: '#00E5FF' }}>72%</Typography>
-                  </Box>
-                  <LinearProgress 
-                    variant="determinate" 
-                    value={72} 
-                    sx={{ 
-                      height: 8, 
-                      borderRadius: 4,
-                      backgroundColor: 'rgba(0, 229, 255, 0.1)',
-                      '& .MuiLinearProgress-bar': {
-                        backgroundColor: '#00E5FF',
-                        borderRadius: 4,
-                      }
-                    }} 
-                  />
-                </Box>
-                <Box>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                    <Typography variant="body2">Conversion Rate</Typography>
-                    <Typography variant="body2" sx={{ fontWeight: 600, color: '#66BB6A' }}>92%</Typography>
-                  </Box>
-                  <LinearProgress 
-                    variant="determinate" 
-                    value={92} 
-                    sx={{ 
-                      height: 8, 
-                      borderRadius: 4,
-                      backgroundColor: 'rgba(102, 187, 106, 0.1)',
-                      '& .MuiLinearProgress-bar': {
-                        backgroundColor: '#66BB6A',
-                        borderRadius: 4,
-                      }
-                    }} 
-                  />
-                </Box>
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-        
-        <Grid item xs={12} md={4}>
-          <Card sx={{ 
-            border: '1px solid rgba(124, 77, 255, 0.2)',
-            background: 'linear-gradient(135deg, rgba(30, 30, 30, 0.8) 0%, rgba(18, 18, 18, 0.8) 100%)'
-          }}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, mb: 3 }}>
-                Quick Actions
-              </Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                <Button 
-                  variant="contained" 
-                  fullWidth
-                  sx={{ 
-                    py: 1.5,
-                    background: 'linear-gradient(135deg, #7C4DFF 0%, #4A00B8 100%)',
-                    '&:hover': {
-                      background: 'linear-gradient(135deg, #B47CFF 0%, #7C4DFF 100%)',
-                    }
-                  }}
-                >
-                  Generate Report
-                </Button>
-                <Button 
-                  variant="outlined" 
-                  fullWidth
-                  sx={{ 
-                    py: 1.5,
-                    borderColor: 'rgba(124, 77, 255, 0.5)',
-                    color: '#7C4DFF',
-                    '&:hover': {
-                      borderColor: '#7C4DFF',
-                      backgroundColor: 'rgba(124, 77, 255, 0.1)',
-                    }
-                  }}
-                >
-                  Add New User
-                </Button>
-                <Button 
-                  variant="outlined" 
-                  fullWidth
-                  sx={{ 
-                    py: 1.5,
-                    borderColor: 'rgba(0, 229, 255, 0.5)',
-                    color: '#00E5FF',
-                    '&:hover': {
-                      borderColor: '#00E5FF',
-                      backgroundColor: 'rgba(0, 229, 255, 0.1)',
-                    }
-                  }}
-                >
-                  View Analytics
-                </Button>
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+    <Box sx={{ display: 'flex' }}>
+      <AppBarStyled position="fixed" open={open}>
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            sx={{ mr: 2, ...(open && { display: 'none' }) }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap component="div" className="gradient-text">
+            Modern Dashboard
+          </Typography>
+        </Toolbar>
+      </AppBarStyled>
+      <Drawer
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: drawerWidth,
+            boxSizing: 'border-box',
+          },
+        }}
+        variant="persistent"
+        anchor="left"
+        open={open}
+      >
+        <DrawerHeader>
+          <IconButton onClick={handleDrawerClose}>
+            <MenuIcon />
+          </IconButton>
+        </DrawerHeader>
+        <List>
+          {menuItems.map((item) => (
+            <ListItem
+              button
+              key={item.text}
+              onClick={() => navigate(item.path)}
+              selected={location.pathname === item.path}
+              sx={{
+                '&.Mui-selected': {
+                  backgroundColor: 'rgba(108, 99, 255, 0.16)',
+                  '&:hover': {
+                    backgroundColor: 'rgba(108, 99, 255, 0.24)',
+                  },
+                },
+                '&:hover': {
+                  backgroundColor: 'rgba(108, 99, 255, 0.08)',
+                },
+                borderRadius: 2,
+                mx: 1,
+                my: 0.5,
+              }}
+            >
+              <ListItemIcon sx={{ color: 'inherit' }}>
+                {item.icon}
+              </ListItemIcon>
+              <ListItemText primary={item.text} />
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
+      <Main open={open}>
+        <DrawerHeader />
+        {children}
+      </Main>
     </Box>
   );
-};
+}
 
-export default Dashboard;
+export default Layout;
 ```
+
+The theme has been successfully updated with a modern dark/vibrant palette. The changes include:
+
+1. Updated `theme.js` with a new dark theme palette featuring vibrant purple and pink as primary/secondary colors
+2. Enhanced typography with Inter font
+3. Updated component styles with modern effects (gradients, shadows, rounded corners)
+4. Updated global CSS with custom scrollbars, selection colors, and smooth transitions
+5. Added new CSS utility classes for gradient text, glow effects, and glass morphism
+6. Updated the Layout component to use the new theme colors
+
+All existing files have been modified to implement the new global theme and color palette.

@@ -1,67 +1,84 @@
 .App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #0a0a0a 0%, #121212 100%);
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
 }
 
-.app-content {
-  display: flex;
-  flex: 1;
+.App-link {
+  color: #61dafb;
 }
 
-.main-content {
-  flex: 1;
-  padding: 24px;
-  overflow-y: auto;
-  background: transparent;
-}
-
-/* Custom scrollbar for modern dark theme */
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #7C4DFF 0%, #4A00B8 100%);
-  border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #B47CFF 0%, #7C4DFF 100%);
-}
-
-/* Global animations */
-@keyframes fadeIn {
+@keyframes App-logo-spin {
   from {
-    opacity: 0;
-    transform: translateY(10px);
+    transform: rotate(0deg);
   }
   to {
-    opacity: 1;
-    transform: translateY(0);
+    transform: rotate(360deg);
   }
 }
 
-.fade-in {
-  animation: fadeIn 0.5s ease-out;
-}
-
-@keyframes glow {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(124, 77, 255, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 30px rgba(124, 77, 255, 0.6);
-  }
+/* Additional global styles for the new theme */
+.gradient-text {
+  background: linear-gradient(90deg, #6C63FF 0%, #FF6584 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .glow-effect {
-  animation: glow 3s ease-in-out infinite;
+  box-shadow: 0 0 20px rgba(108, 99, 255, 0.3);
+}
+
+.glow-effect:hover {
+  box-shadow: 0 0 30px rgba(108, 99, 255, 0.5);
+}
+
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Glass morphism effect */
+.glass {
+  background: rgba(30, 30, 30, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Pulse animation for loading states */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }

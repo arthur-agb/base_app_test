@@ -1,3 +1,4 @@
+/* Import Inter font for modern typography */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 * {
@@ -13,38 +14,54 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #121212;
-  color: #FFFFFF;
+  background: linear-gradient(135deg, #0a0a0a 0%, #121212 100%);
+  min-height: 100vh;
+  color: #ffffff;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-  background: rgba(124, 77, 255, 0.1);
-  padding: 2px 6px;
-  border-radius: 4px;
-  color: #B47CFF;
+}
+
+/* Custom scrollbar for modern dark theme */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #6C63FF 0%, #4A44B2 100%);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #8A84FF 0%, #6C63FF 100%);
 }
 
 /* Selection color */
 ::selection {
-  background-color: rgba(124, 77, 255, 0.5);
-  color: #FFFFFF;
+  background-color: rgba(108, 99, 255, 0.5);
+  color: #ffffff;
 }
 
-/* Focus outline for accessibility */
+/* Smooth transitions */
+* {
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Focus styles for accessibility */
 :focus {
-  outline: 2px solid #7C4DFF;
+  outline: 2px solid #6C63FF;
   outline-offset: 2px;
 }
 
 /* Remove focus outline for mouse users */
 :focus:not(:focus-visible) {
   outline: none;
-}
-
-/* Restore focus outline for keyboard users */
-:focus-visible {
-  outline: 2px solid #7C4DFF;
-  outline-offset: 2px;
 }
