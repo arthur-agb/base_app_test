@@ -13,15 +13,14 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    setLoading(true);
-
     try {
+      setError('');
+      setLoading(true);
       await login(email, password);
       navigate('/dashboard');
     } catch (err) {
       setError('Failed to log in. Please check your credentials.');
-      console.error('Login error:', err);
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -39,26 +38,24 @@ const LoginPage = () => {
           <div className="form-group">
             <label htmlFor="email">Email Address</label>
             <input
-              id="email"
               type="email"
+              id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
               required
-              disabled={loading}
+              placeholder="Enter your email"
             />
           </div>
           
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <input
-              id="password"
               type="password"
+              id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
               required
-              disabled={loading}
+              placeholder="Enter your password"
             />
           </div>
           
@@ -77,7 +74,6 @@ const LoginPage = () => {
             <button 
               className="link-button"
               onClick={() => navigate('/register')}
-              disabled={loading}
             >
               Sign up here
             </button>
@@ -86,7 +82,6 @@ const LoginPage = () => {
             <button 
               className="link-button"
               onClick={() => navigate('/forgot-password')}
-              disabled={loading}
             >
               Forgot your password?
             </button>
