@@ -30,63 +30,38 @@ const LoginPage = () => {
   return (
     <div className="login-container">
       <div className="login-form-wrapper">
-        <h1 className="login-title">Welcome Back</h1>
-        <p className="login-subtitle">Please sign in to your account</p>
-        
+        <h1 className="login-title">Sign In</h1>
         {error && <div className="login-error">{error}</div>}
-        
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
-            <label htmlFor="email">Email Address</label>
+            <label htmlFor="email">Email</label>
             <input
-              type="email"
               id="email"
+              type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="Enter your email"
             />
           </div>
-          
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <input
-              type="password"
               id="password"
+              type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               placeholder="Enter your password"
             />
           </div>
-          
-          <button 
-            type="submit" 
-            className="login-button"
-            disabled={loading}
-          >
-            {loading ? 'Signing in...' : 'Sign In'}
+          <button type="submit" disabled={loading} className="login-button">
+            {loading ? 'Signing In...' : 'Sign In'}
           </button>
         </form>
-        
-        <div className="login-footer">
-          <p>
-            Don't have an account?{' '}
-            <button 
-              className="link-button"
-              onClick={() => navigate('/register')}
-            >
-              Sign up here
-            </button>
-          </p>
-          <p>
-            <button 
-              className="link-button"
-              onClick={() => navigate('/forgot-password')}
-            >
-              Forgot your password?
-            </button>
-          </p>
+        <div className="login-links">
+          <a href="/forgot-password">Forgot Password?</a>
+          <a href="/register">Don't have an account? Sign Up</a>
         </div>
       </div>
     </div>
@@ -99,40 +74,43 @@ export default LoginPage;
 ```css frontend/src/pages/LoginPage.css
 .login-container {
   display: flex;
-  align-items: flex-start;
   justify-content: flex-start;
+  align-items: flex-start;
   min-height: 100vh;
-  padding: 40px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+  background-color: #f5f5f5;
 }
 
 .login-form-wrapper {
   background: white;
-  border-radius: 12px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 420px;
-  text-align: left;
+  max-width: 400px;
+  margin: 0;
 }
 
 .login-title {
-  font-size: 32px;
-  font-weight: 700;
+  margin-bottom: 24px;
   color: #333;
-  margin-bottom: 8px;
+  font-size: 28px;
+  font-weight: 600;
 }
 
-.login-subtitle {
-  font-size: 16px;
-  color: #666;
-  margin-bottom: 32px;
+.login-error {
+  background-color: #fee;
+  color: #c33;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  border: 1px solid #fcc;
 }
 
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
 }
 
 .form-group {
@@ -142,97 +120,71 @@ export default LoginPage;
 }
 
 .form-group label {
-  font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   color: #555;
 }
 
 .form-group input {
-  padding: 12px 16px;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
   font-size: 16px;
-  transition: border-color 0.3s ease;
+  transition: border-color 0.3s;
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
 .login-button {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-color: #007bff;
   color: white;
   border: none;
-  border-radius: 8px;
   padding: 14px;
+  border-radius: 4px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  margin-top: 8px;
+  transition: background-color 0.3s;
+  margin-top: 10px;
 }
 
 .login-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+  background-color: #0056b3;
 }
 
 .login-button:disabled {
-  opacity: 0.6;
+  background-color: #ccc;
   cursor: not-allowed;
 }
 
-.login-error {
-  background: #fee;
-  color: #c33;
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 24px;
+.login-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+  text-align: center;
+}
+
+.login-links a {
+  color: #007bff;
+  text-decoration: none;
   font-size: 14px;
-  border-left: 4px solid #c33;
 }
 
-.login-footer {
-  margin-top: 32px;
-  padding-top: 24px;
-  border-top: 1px solid #eee;
-  font-size: 14px;
-  color: #666;
-}
-
-.login-footer p {
-  margin: 8px 0;
-}
-
-.link-button {
-  background: none;
-  border: none;
-  color: #667eea;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 0;
-  font-size: inherit;
+.login-links a:hover {
   text-decoration: underline;
 }
 
-.link-button:hover {
-  color: #764ba2;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .login-container {
-    padding: 20px;
+    padding: 10px;
   }
   
   .login-form-wrapper {
-    padding: 30px;
-    max-width: 100%;
-  }
-  
-  .login-title {
-    font-size: 28px;
+    padding: 30px 20px;
   }
 }
 ```

@@ -29,63 +29,38 @@ const LoginPage = () => {
   return (
     <div className="login-container">
       <div className="login-form-wrapper">
-        <h1 className="login-title">Welcome Back</h1>
-        <p className="login-subtitle">Please sign in to your account</p>
-        
+        <h1 className="login-title">Sign In</h1>
         {error && <div className="login-error">{error}</div>}
-        
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
-            <label htmlFor="email">Email Address</label>
+            <label htmlFor="email">Email</label>
             <input
-              type="email"
               id="email"
+              type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="Enter your email"
             />
           </div>
-          
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <input
-              type="password"
               id="password"
+              type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               placeholder="Enter your password"
             />
           </div>
-          
-          <button 
-            type="submit" 
-            className="login-button"
-            disabled={loading}
-          >
-            {loading ? 'Signing in...' : 'Sign In'}
+          <button type="submit" disabled={loading} className="login-button">
+            {loading ? 'Signing In...' : 'Sign In'}
           </button>
         </form>
-        
-        <div className="login-footer">
-          <p>
-            Don't have an account?{' '}
-            <button 
-              className="link-button"
-              onClick={() => navigate('/register')}
-            >
-              Sign up here
-            </button>
-          </p>
-          <p>
-            <button 
-              className="link-button"
-              onClick={() => navigate('/forgot-password')}
-            >
-              Forgot your password?
-            </button>
-          </p>
+        <div className="login-links">
+          <a href="/forgot-password">Forgot Password?</a>
+          <a href="/register">Don't have an account? Sign Up</a>
         </div>
       </div>
     </div>
