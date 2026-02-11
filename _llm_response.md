@@ -14,15 +14,14 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     try {
       setError('');
       setLoading(true);
       await login(email, password);
       navigate('/dashboard');
     } catch (err) {
-      setError('Failed to sign in. Please check your credentials.');
-      console.error('Login error:', err);
+      setError('Failed to log in. Please check your credentials.');
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -30,51 +29,66 @@ const LoginPage = () => {
 
   return (
     <div className="login-container">
-      <div className="login-header">
-        <h1>Welcome Back</h1>
-        <p>Please sign in to your account</p>
-      </div>
-      
-      <form className="login-form" onSubmit={handleSubmit}>
+      <div className="login-form-wrapper">
+        <h1 className="login-title">Welcome Back</h1>
+        <p className="login-subtitle">Please sign in to your account</p>
+        
         {error && <div className="login-error">{error}</div>}
         
-        <div className="form-group">
-          <label htmlFor="email">Email Address</label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            placeholder="Enter your email"
-          />
-        </div>
+        <form onSubmit={handleSubmit} className="login-form">
+          <div className="form-group">
+            <label htmlFor="email">Email Address</label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              placeholder="Enter your email"
+            />
+          </div>
+          
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              placeholder="Enter your password"
+            />
+          </div>
+          
+          <button 
+            type="submit" 
+            className="login-button"
+            disabled={loading}
+          >
+            {loading ? 'Signing in...' : 'Sign In'}
+          </button>
+        </form>
         
-        <div className="form-group">
-          <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            placeholder="Enter your password"
-          />
+        <div className="login-footer">
+          <p>
+            Don't have an account?{' '}
+            <button 
+              className="link-button"
+              onClick={() => navigate('/register')}
+            >
+              Sign up here
+            </button>
+          </p>
+          <p>
+            <button 
+              className="link-button"
+              onClick={() => navigate('/forgot-password')}
+            >
+              Forgot your password?
+            </button>
+          </p>
         </div>
-        
-        <button 
-          type="submit" 
-          className="login-button"
-          disabled={loading}
-        >
-          {loading ? 'Signing in...' : 'Sign In'}
-        </button>
-        
-        <div className="login-links">
-          <a href="/forgot-password" className="link">Forgot password?</a>
-          <a href="/register" className="link">Create new account</a>
-        </div>
-      </form>
+      </div>
     </div>
   );
 };
@@ -84,140 +98,128 @@ export default LoginPage;
 
 ```css frontend/src/pages/LoginPage.css
 .login-container {
-  position: absolute;
-  top: 40px;
-  left: 40px;
-  max-width: 400px;
-  width: 100%;
-  padding: 30px;
-  background-color: #ffffff;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.login-form-wrapper {
+  background: white;
+  padding: 2.5rem;
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  box-sizing: border-box;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 420px;
+  text-align: left;
 }
 
-.login-header {
-  margin-bottom: 30px;
-}
-
-.login-header h1 {
-  font-size: 28px;
-  font-weight: 600;
+.login-title {
+  font-size: 2rem;
+  font-weight: 700;
   color: #333;
-  margin: 0 0 8px 0;
+  margin-bottom: 0.5rem;
 }
 
-.login-header p {
-  font-size: 16px;
+.login-subtitle {
   color: #666;
-  margin: 0;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+}
+
+.login-error {
+  background-color: #fee;
+  color: #c33;
+  padding: 0.75rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  border: 1px solid #fcc;
 }
 
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 1.5rem;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0.5rem;
 }
 
 .form-group label {
-  font-size: 14px;
-  font-weight: 500;
-  color: #555;
+  font-weight: 600;
+  color: #444;
+  font-size: 0.9rem;
 }
 
 .form-group input {
-  padding: 12px 16px;
-  border: 1px solid #ddd;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e1e5e9;
   border-radius: 8px;
-  font-size: 16px;
+  font-size: 1rem;
   transition: border-color 0.2s;
-  box-sizing: border-box;
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: #4a90e2;
-  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
-}
-
-.login-error {
-  padding: 12px;
-  background-color: #fee;
-  border: 1px solid #f99;
-  border-radius: 8px;
-  color: #c33;
-  font-size: 14px;
-  text-align: center;
+  border-color: #667eea;
 }
 
 .login-button {
-  padding: 14px;
-  background-color: #4a90e2;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
+  padding: 0.875rem;
   border-radius: 8px;
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-top: 0.5rem;
 }
 
 .login-button:hover:not(:disabled) {
-  background-color: #3a80d2;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
 }
 
 .login-button:disabled {
-  background-color: #ccc;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
-.login-links {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
+.login-footer {
+  margin-top: 2rem;
+  text-align: center;
+  color: #666;
+  font-size: 0.9rem;
 }
 
-.login-links .link {
-  font-size: 14px;
-  color: #4a90e2;
-  text-decoration: none;
-  transition: color 0.2s;
-}
-
-.login-links .link:hover {
-  color: #3a80d2;
+.link-button {
+  background: none;
+  border: none;
+  color: #667eea;
+  cursor: pointer;
+  font-size: inherit;
+  padding: 0;
   text-decoration: underline;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .login-container {
-    top: 20px;
-    left: 20px;
-    right: 20px;
-    max-width: none;
-    margin: 0;
-  }
+.link-button:hover {
+  color: #764ba2;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .login-container {
-    top: 10px;
-    left: 10px;
-    right: 10px;
-    padding: 20px;
+    padding: 1rem;
   }
   
-  .login-links {
-    flex-direction: column;
-    gap: 10px;
-    align-items: flex-start;
+  .login-form-wrapper {
+    padding: 2rem;
   }
 }
 ```
