@@ -18,22 +18,19 @@ jobs:
       with:
         python-version: '3.9'
     
-    - name: Display Python version
-      run: python -c "import sys; print(f'Python {sys.version}')"
-    
-    - name: Run application verification
+    - name: Install dependencies
       run: |
-        chmod +x run_verification.sh
-        ./run_verification.sh
+        python -m pip install --upgrade pip
     
-    - name: Run unit tests
+    - name: Run startup verification
+      run: |
+        python app.py
+    
+    - name: Run tests
       run: |
         python -m unittest test_verification.py -v
     
-    - name: Verify no syntax errors
+    - name: Run shell verification script
       run: |
-        python -m py_compile app.py test_verification.py
-    
-    - name: Check code style (basic)
-      run: |
-        python -m py_compile app.py test_verification.py 2>&1 | grep -q "SyntaxError" && exit 1 || exit 0
+        chmod +x run_verification.sh
+        ./run_verification.sh
