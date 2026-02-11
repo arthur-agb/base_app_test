@@ -1,79 +1,129 @@
+/* Import Inter font for modern typography */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 :root {
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* CSS variables for the new theme */
+  --primary-main: #7C4DFF;
+  --primary-light: #B47CFF;
+  --primary-dark: #3F1DCB;
+  
+  --secondary-main: #00E5FF;
+  --secondary-light: #6AFFFF;
+  --secondary-dark: #00B2CC;
+  
+  --background-default: #121212;
+  --background-paper: #1E1E1E;
+  --background-dark: #0A0A0A;
+  --background-light: #2D2D2D;
+  
+  --text-primary: #FFFFFF;
+  --text-secondary: #B0B0B0;
+  --text-disabled: #6D6D6D;
+  
+  --divider-color: #333333;
+  
+  --border-radius: 12px;
+  --border-radius-small: 8px;
+  --border-radius-large: 16px;
+  
+  --gradient-primary: linear-gradient(135deg, #7C4DFF 0%, #00E5FF 100%);
+  --gradient-secondary: linear-gradient(135deg, #FF4081 0%, #FF9100 100%);
+  --gradient-background: linear-gradient(135deg, #121212 0%, #1E1E1E 100%);
+  
+  --glow-primary: 0 0 20px rgba(124, 77, 255, 0.5);
+  --glow-secondary: 0 0 20px rgba(0, 229, 255, 0.5);
 }
 
 * {
-
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-html, body, #root {
-  height: 100%;
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background-default);
+  color: var(--text-primary);
+  overflow-x: hidden;
 }
 
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+  background-color: var(--background-paper);
+  padding: 2px 6px;
+  border-radius: var(--border-radius-small);
+  color: var(--secondary-main);
+}
+
+/* Global link styling */
 a {
+  color: var(--primary-main);
   text-decoration: none;
+  transition: color 0.2s ease;
 }
 
 a:hover {
+  color: var(--primary-light);
   text-decoration: underline;
 }
 
+/* Global button base styles */
 button {
-  cursor: pointer;
+  font-family: 'Inter', sans-serif;
 }
 
-/* Custom Scrollbar Styling */
-/* Default (Light Mode) */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 8px; /* Vertical scrollbar width */
-  height: 8px; /* Horizontal scrollbar height */
+/* Global card styling */
+.card {
+  background-color: var(--background-paper);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--divider-color);
 }
 
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
+/* Global input styling */
+input, textarea, select {
+  background-color: var(--background-light);
+  border: 1px solid var(--divider-color);
+  border-radius: var(--border-radius-small);
+  color: var(--text-primary);
+  padding: 0.75rem;
+  font-family: 'Inter', sans-serif;
+  transition: border-color 0.2s ease;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: rgba(209, 213, 219, 0.8); /* gray-300 */
-  border-radius: 4px;
-  border: 2px solid transparent;
-  background-clip: content-box;
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--primary-main);
+  box-shadow: 0 0 0 2px rgba(124, 77, 255, 0.2);
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(156, 163, 175, 1); /* gray-400 */
+/* Global table styling */
+table {
+  border-collapse: collapse;
+  width: 100%;
 }
 
-.custom-scrollbar::-webkit-scrollbar-corner {
-  background: transparent;
+th {
+  background-color: var(--background-light);
+  color: var(--text-primary);
+  font-weight: 600;
+  text-align: left;
+  padding: 1rem;
 }
 
-/* Dark Mode Overrides */
-/* Assumes 'dark' class is present on html/body or parent */
-.dark .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: rgba(75, 85, 99, 0.6); /* gray-600 */
+td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--divider-color);
+  color: var(--text-secondary);
 }
 
-.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(107, 114, 128, 0.9); /* gray-500 */
-}
-
-/* Firefox Support */
-.custom-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(209, 213, 219, 0.8) transparent;
-}
-
-.dark .custom-scrollbar {
-  scrollbar-color: rgba(75, 85, 99, 0.6) transparent;
+tr:hover td {
+  background-color: rgba(124, 77, 255, 0.05);
 }
