@@ -72,28 +72,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Redesigned</title>
+    <title>Login</title>
     <link rel="stylesheet" href="login.css">
 </head>
 <body>
     <div class="login-container">
-        <div class="login-form">
+        <form class="login-form" id="loginForm">
             <h2>Login</h2>
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <button type="submit" class="login-button">Login</button>
-                <div id="errorMessage" class="error-message" style="display: none;"></div>
-            </form>
-        </div>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="login-button">Login</button>
+            <div class="error-message" id="errorMessage"></div>
+        </form>
     </div>
-
     <script src="login.js"></script>
 </body>
 </html>
@@ -101,31 +98,24 @@
 
 ```javascript login.js
 /**
- * Login page functionality
- * Handles form submission and validation
+ * Login form handling
  */
-
 document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('loginForm');
     const errorMessage = document.getElementById('errorMessage');
     
-    /**
-     * Handle form submission
-     * @param {Event} event - The form submission event
-     */
     loginForm.addEventListener('submit', function(event) {
         event.preventDefault();
         
         const username = document.getElementById('username').value.trim();
-        const password = document.getElementById('password').value.trim();
+        const password = document.getElementById('password').value;
         
         // Clear previous error
-        errorMessage.style.display = 'none';
         errorMessage.textContent = '';
         
         // Basic validation
         if (!username || !password) {
-            showError('Please fill in all fields');
+            errorMessage.textContent = 'Please fill in all fields';
             return;
         }
         
@@ -134,22 +124,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     /**
-     * Display error message
-     * @param {string} message - The error message to display
-     */
-    function showError(message) {
-        errorMessage.textContent = message;
-        errorMessage.style.display = 'block';
-    }
-    
-    /**
-     * Simulate login process
+     * Simulates login process
      * @param {string} username - The username
      * @param {string} password - The password
      */
     function simulateLogin(username, password) {
         // In a real application, this would be an API call
-        console.log('Attempting login with:', { username, password });
+        console.log('Attempting login for:', username);
         
         // Simulate API delay
         setTimeout(() => {
@@ -158,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert('Login successful!');
                 // In a real app, you would redirect or update UI
             } else {
-                showError('Invalid credentials');
+                errorMessage.textContent = 'Invalid credentials';
             }
         }, 500);
     }
