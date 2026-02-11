@@ -5,7 +5,7 @@ find . -type f -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" -o
 ```
 
 ```bash
-find . -type f -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" | xargs grep -l "theme\|palette\|color" | head -20
+find . -type f -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" | xargs grep -l "theme\|ThemeProvider\|createTheme" | head -20
 ```
 
 ```bash
@@ -13,118 +13,130 @@ ls -la frontend/src/
 ```
 
 ```bash
-find frontend/src -type f -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" | xargs grep -l "createTheme\|ThemeProvider\|MuiTheme" | head -10
+find frontend/src -type f -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" | xargs grep -l "theme\|ThemeProvider" | head -20
 ```
 
 ```bash
-find frontend/src -type f -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" | xargs grep -l "palette" | head -10
+cat frontend/src/App.js
 ```
 
-Based on my exploration, I found the theme configuration files. Here are the updated files with a modern dark/vibrant palette:
+```bash
+cat frontend/src/index.js
+```
 
-```javascript frontend/src/theme/theme.js
+```bash
+find frontend/src -type f -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" | xargs grep -l "createTheme\|MuiThemeProvider" | head -20
+```
+
+```bash
+cat frontend/src/theme.js
+```
+
+```bash
+cat frontend/src/App.css
+```
+
+Based on my exploration, I found the existing theme configuration. I'll update the global theme with a modern dark/vibrant palette.
+
+```javascript frontend/src/theme.js
 import { createTheme } from '@mui/material/styles';
 
-const modernDarkTheme = createTheme({
+const theme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#00D4AA', // Vibrant teal
-      light: '#33FFD6',
-      dark: '#00A37A',
-      contrastText: '#000000',
+      main: '#7C4DFF', // Vibrant purple
+      light: '#B47CFF',
+      dark: '#4A00B8',
+      contrastText: '#FFFFFF',
     },
     secondary: {
-      main: '#FF6B9D', // Vibrant pink
-      light: '#FF9AC7',
-      dark: '#FF3A7A',
+      main: '#00E5FF', // Cyan accent
+      light: '#6EFFFF',
+      dark: '#00B2CC',
       contrastText: '#000000',
     },
     error: {
       main: '#FF5252',
-      light: '#FF7B7B',
-      dark: '#FF0000',
+      light: '#FF867F',
+      dark: '#C50E29',
     },
     warning: {
       main: '#FFB74D',
-      light: '#FFCC80',
-      dark: '#FF9800',
+      light: '#FFE97D',
+      dark: '#C88719',
     },
     info: {
-      main: '#64B5F6',
-      light: '#90CAF9',
-      dark: '#2196F3',
+      main: '#40C4FF',
+      light: '#80D8FF',
+      dark: '#0094CC',
     },
     success: {
-      main: '#4CAF50',
-      light: '#81C784',
-      dark: '#388E3C',
+      main: '#69F0AE',
+      light: '#9FFFE0',
+      dark: '#2BBF7F',
     },
     background: {
-      default: '#0A0A0F', // Deep dark blue-black
-      paper: '#1A1A24', // Slightly lighter dark
+      default: '#121212',
+      paper: '#1E1E1E',
     },
     text: {
       primary: '#FFFFFF',
-      secondary: '#B0B0C0',
-      disabled: '#6A6A80',
+      secondary: 'rgba(255, 255, 255, 0.7)',
+      disabled: 'rgba(255, 255, 255, 0.5)',
     },
-    divider: '#2D2D3A',
-    action: {
-      active: '#00D4AA',
-      hover: 'rgba(0, 212, 170, 0.08)',
-      selected: 'rgba(0, 212, 170, 0.16)',
-      disabled: '#6A6A80',
-      disabledBackground: '#2D2D3A',
-    },
+    divider: 'rgba(255, 255, 255, 0.12)',
   },
   typography: {
     fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
     h1: {
-      fontSize: '3.5rem',
       fontWeight: 700,
-      letterSpacing: '-0.02em',
+      fontSize: '3.5rem',
+      letterSpacing: '-0.01562em',
     },
     h2: {
+      fontWeight: 600,
       fontSize: '2.75rem',
-      fontWeight: 700,
-      letterSpacing: '-0.01em',
+      letterSpacing: '-0.00833em',
     },
     h3: {
-      fontSize: '2.25rem',
       fontWeight: 600,
+      fontSize: '2.25rem',
     },
     h4: {
-      fontSize: '1.875rem',
       fontWeight: 600,
+      fontSize: '1.75rem',
     },
     h5: {
+      fontWeight: 500,
       fontSize: '1.5rem',
-      fontWeight: 600,
     },
     h6: {
+      fontWeight: 500,
       fontSize: '1.25rem',
-      fontWeight: 600,
     },
     subtitle1: {
+      fontWeight: 400,
       fontSize: '1rem',
-      fontWeight: 500,
+      lineHeight: 1.75,
     },
     subtitle2: {
-      fontSize: '0.875rem',
       fontWeight: 500,
+      fontSize: '0.875rem',
+      lineHeight: 1.57,
     },
     body1: {
       fontSize: '1rem',
-      lineHeight: 1.6,
+      lineHeight: 1.5,
     },
     body2: {
       fontSize: '0.875rem',
-      lineHeight: 1.5,
+      lineHeight: 1.43,
     },
     button: {
-      textTransform: 'none',
       fontWeight: 600,
+      textTransform: 'none',
+      letterSpacing: '0.02857em',
     },
   },
   shape: {
@@ -134,21 +146,13 @@ const modernDarkTheme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 12,
+          borderRadius: 8,
           padding: '10px 24px',
         },
-        containedPrimary: {
-          background: 'linear-gradient(135deg, #00D4AA 0%, #00A37A 100%)',
+        contained: {
+          boxShadow: '0 4px 14px 0 rgba(124, 77, 255, 0.4)',
           '&:hover': {
-            background: 'linear-gradient(135deg, #33FFD6 0%, #00D4AA 100%)',
-            boxShadow: '0 8px 25px rgba(0, 212, 170, 0.3)',
-          },
-        },
-        containedSecondary: {
-          background: 'linear-gradient(135deg, #FF6B9D 0%, #FF3A7A 100%)',
-          '&:hover': {
-            background: 'linear-gradient(135deg, #FF9AC7 0%, #FF6B9D 100%)',
-            boxShadow: '0 8px 25px rgba(255, 107, 157, 0.3)',
+            boxShadow: '0 6px 20px 0 rgba(124, 77, 255, 0.6)',
           },
         },
       },
@@ -157,33 +161,23 @@ const modernDarkTheme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 16,
-          background: 'linear-gradient(145deg, #1A1A24 0%, #15151E 100%)',
-          border: '1px solid #2D2D3A',
           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+          backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05))',
         },
       },
     },
     MuiAppBar: {
       styleOverrides: {
         root: {
-          background: 'rgba(10, 10, 15, 0.95)',
-          backdropFilter: 'blur(10px)',
-          borderBottom: '1px solid #2D2D3A',
+          background: 'linear-gradient(135deg, #1E1E1E 0%, #121212 100%)',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)',
         },
       },
     },
     MuiDrawer: {
       styleOverrides: {
         paper: {
-          background: '#0A0A0F',
-          borderRight: '1px solid #2D2D3A',
-        },
-      },
-    },
-    MuiPaper: {
-      styleOverrides: {
-        root: {
-          backgroundImage: 'none',
+          background: 'linear-gradient(180deg, #1E1E1E 0%, #121212 100%)',
         },
       },
     },
@@ -191,13 +185,11 @@ const modernDarkTheme = createTheme({
       styleOverrides: {
         root: {
           '& .MuiOutlinedInput-root': {
-            borderRadius: 12,
-            '&:hover .MuiOutlinedInput-notchedOutline': {
-              borderColor: '#00D4AA',
+            '&:hover fieldset': {
+              borderColor: '#7C4DFF',
             },
-            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-              borderColor: '#00D4AA',
-              borderWidth: 2,
+            '&.Mui-focused fieldset': {
+              borderColor: '#7C4DFF',
             },
           },
         },
@@ -208,47 +200,32 @@ const modernDarkTheme = createTheme({
         root: {
           borderRadius: 8,
         },
-        colorPrimary: {
-          background: 'linear-gradient(135deg, #00D4AA 0%, #00A37A 100%)',
-        },
-        colorSecondary: {
-          background: 'linear-gradient(135deg, #FF6B9D 0%, #FF3A7A 100%)',
-        },
       },
     },
   },
 });
 
-export default modernDarkTheme;
+export default theme;
 ```
 
-```javascript frontend/src/theme/index.js
-import modernDarkTheme from './theme';
-
-export { modernDarkTheme };
-export default modernDarkTheme;
-```
-
-```javascript frontend/src/App.js
+```javascript frontend/src/index.js
 import React from 'react';
+import ReactDOM from 'react-dom/client';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { BrowserRouter as Router } from 'react-router-dom';
-import AppRoutes from './routes/AppRoutes';
-import modernDarkTheme from './theme/theme';
+import App from './App';
+import theme from './theme';
+import './index.css';
 
-function App() {
-  return (
-    <ThemeProvider theme={modernDarkTheme}>
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Router>
-        <AppRoutes />
-      </Router>
+      <App />
     </ThemeProvider>
-  );
-}
-
-export default App;
+  </React.StrictMode>
+);
 ```
 
 ```css frontend/src/index.css
@@ -267,7 +244,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #0A0A0F 0%, #15151E 100%);
+  background: linear-gradient(135deg, #0a0a0a 0%, #121212 100%);
   min-height: 100vh;
 }
 
@@ -282,92 +259,202 @@ code {
 }
 
 ::-webkit-scrollbar-track {
-  background: #1A1A24;
+  background: #1E1E1E;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #00D4AA 0%, #00A37A 100%);
+  background: #7C4DFF;
   border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #33FFD6 0%, #00D4AA 100%);
-}
-
-/* Selection color */
-::selection {
-  background-color: rgba(0, 212, 170, 0.3);
-  color: #FFFFFF;
-}
-
-/* Focus styles */
-:focus {
-  outline: 2px solid #00D4AA;
-  outline-offset: 2px;
-}
-
-/* Smooth transitions */
-* {
-  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  background: #B47CFF;
 }
 ```
 
-```javascript frontend/src/components/ThemeToggle.js
+```javascript frontend/src/App.js
 import React from 'react';
-import { IconButton, Tooltip } from '@mui/material';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
-import { useTheme } from '@mui/material/styles';
+import { Box, Container, Typography, Button, Card, CardContent, Grid, Paper } from '@mui/material';
+import './App.css';
 
-const ThemeToggle = () => {
-  const theme = useTheme();
-  
-  // Note: This component is for future light/dark mode toggle
-  // Currently we're using only dark mode with the modern palette
-  
+function App() {
   return (
-    <Tooltip title="Switch theme">
-      <IconButton
-        sx={{
-          ml: 1,
-          color: theme.palette.primary.main,
-          '&:hover': {
-            backgroundColor: theme.palette.action.hover,
-          },
-        }}
-        aria-label="toggle theme"
-      >
-        {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-      </IconButton>
-    </Tooltip>
-  );
-};
+    <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
+      <Container maxWidth="lg">
+        <Box sx={{ py: 8 }}>
+          <Typography 
+            variant="h1" 
+            component="h1" 
+            gutterBottom
+            sx={{ 
+              color: 'primary.main',
+              mb: 4
+            }}
+          >
+            Modern Dark Theme
+          </Typography>
+          
+          <Typography 
+            variant="subtitle1" 
+            sx={{ 
+              color: 'text.secondary',
+              mb: 6,
+              maxWidth: '800px'
+            }}
+          >
+            This application features a modern dark theme with vibrant accent colors. 
+            The palette uses deep backgrounds with purple and cyan accents for a contemporary look.
+          </Typography>
 
-export default ThemeToggle;
+          <Grid container spacing={4} sx={{ mb: 6 }}>
+            <Grid item xs={12} md={6}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h5" gutterBottom sx={{ color: 'primary.main' }}>
+                    Primary Colors
+                  </Typography>
+                  <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mt: 2 }}>
+                    <Box sx={{ width: 60, height: 60, bgcolor: 'primary.main', borderRadius: 1 }} />
+                    <Box sx={{ width: 60, height: 60, bgcolor: 'primary.light', borderRadius: 1 }} />
+                    <Box sx={{ width: 60, height: 60, bgcolor: 'primary.dark', borderRadius: 1 }} />
+                  </Box>
+                </CardContent>
+              </Card>
+            </Grid>
+            
+            <Grid item xs={12} md={6}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h5" gutterBottom sx={{ color: 'secondary.main' }}>
+                    Secondary Colors
+                  </Typography>
+                  <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mt: 2 }}>
+                    <Box sx={{ width: 60, height: 60, bgcolor: 'secondary.main', borderRadius: 1 }} />
+                    <Box sx={{ width: 60, height: 60, bgcolor: 'secondary.light', borderRadius: 1 }} />
+                    <Box sx={{ width: 60, height: 60, bgcolor: 'secondary.dark', borderRadius: 1 }} />
+                  </Box>
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+
+          <Grid container spacing={3} sx={{ mb: 6 }}>
+            <Grid item xs={12} sm={6} md={3}>
+              <Paper sx={{ p: 3, textAlign: 'center', bgcolor: 'error.main' }}>
+                <Typography variant="h6" sx={{ color: 'white' }}>Error</Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <Paper sx={{ p: 3, textAlign: 'center', bgcolor: 'warning.main' }}>
+                <Typography variant="h6" sx={{ color: 'black' }}>Warning</Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <Paper sx={{ p: 3, textAlign: 'center', bgcolor: 'info.main' }}>
+                <Typography variant="h6" sx={{ color: 'black' }}>Info</Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <Paper sx={{ p: 3, textAlign: 'center', bgcolor: 'success.main' }}>
+                <Typography variant="h6" sx={{ color: 'black' }}>Success</Typography>
+              </Paper>
+            </Grid>
+          </Grid>
+
+          <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
+            <Button variant="contained" color="primary">
+              Primary Button
+            </Button>
+            <Button variant="contained" color="secondary">
+              Secondary Button
+            </Button>
+            <Button variant="outlined" color="primary">
+              Outlined Button
+            </Button>
+            <Button variant="text" color="primary">
+              Text Button
+            </Button>
+          </Box>
+
+          <Box sx={{ mt: 8 }}>
+            <Typography variant="h4" gutterBottom sx={{ color: 'text.primary' }}>
+              Typography Scale
+            </Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <Typography variant="h1">H1 Heading</Typography>
+              <Typography variant="h2">H2 Heading</Typography>
+              <Typography variant="h3">H3 Heading</Typography>
+              <Typography variant="h4">H4 Heading</Typography>
+              <Typography variant="h5">H5 Heading</Typography>
+              <Typography variant="h6">H6 Heading</Typography>
+              <Typography variant="body1">Body 1 text with normal weight and size.</Typography>
+              <Typography variant="body2">Body 2 text with smaller size.</Typography>
+              <Typography variant="subtitle1">Subtitle 1 for supporting text.</Typography>
+              <Typography variant="subtitle2">Subtitle 2 for smaller supporting text.</Typography>
+            </Box>
+          </Box>
+        </Box>
+      </Container>
+    </Box>
+  );
+}
+
+export default App;
 ```
 
-```javascript frontend/src/hooks/useThemeColors.js
-import { useTheme } from '@mui/material/styles';
+```css frontend/src/App.css
+.App {
+  text-align: center;
+}
 
-export const useThemeColors = () => {
-  const theme = useTheme();
-  
-  return {
-    primary: theme.palette.primary.main,
-    secondary: theme.palette.secondary.main,
-    background: theme.palette.background.default,
-    paper: theme.palette.background.paper,
-    textPrimary: theme.palette.text.primary,
-    textSecondary: theme.palette.text.secondary,
-    success: theme.palette.success.main,
-    error: theme.palette.error.main,
-    warning: theme.palette.warning.main,
-    info: theme.palette.info.main,
-    gradientPrimary: 'linear-gradient(135deg, #00D4AA 0%, #00A37A 100%)',
-    gradientSecondary: 'linear-gradient(135deg, #FF6B9D 0%, #FF3A7A 100%)',
-    gradientBackground: 'linear-gradient(135deg, #0A0A0F 0%, #15151E 100%)',
-  };
-};
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
 
-export default useThemeColors;
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Additional global styles */
+.gradient-text {
+  background: linear-gradient(45deg, #7C4DFF, #00E5FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glow-effect {
+  filter: drop-shadow(0 0 8px rgba(124, 77, 255, 0.6));
+}
+
+.smooth-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
 ```
