@@ -50,52 +50,31 @@ const theme = createTheme({
     fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
     h1: {
       fontWeight: 700,
-      fontSize: '3.5rem',
-      letterSpacing: '-0.01562em',
+      fontSize: '2.5rem',
     },
     h2: {
       fontWeight: 600,
-      fontSize: '2.75rem',
-      letterSpacing: '-0.00833em',
+      fontSize: '2rem',
     },
     h3: {
       fontWeight: 600,
-      fontSize: '2.25rem',
+      fontSize: '1.75rem',
     },
     h4: {
       fontWeight: 600,
-      fontSize: '1.75rem',
+      fontSize: '1.5rem',
     },
     h5: {
       fontWeight: 500,
-      fontSize: '1.5rem',
+      fontSize: '1.25rem',
     },
     h6: {
       fontWeight: 500,
-      fontSize: '1.25rem',
-    },
-    subtitle1: {
-      fontWeight: 400,
       fontSize: '1rem',
-      lineHeight: 1.75,
-    },
-    subtitle2: {
-      fontWeight: 500,
-      fontSize: '0.875rem',
-      lineHeight: 1.57,
-    },
-    body1: {
-      fontSize: '1rem',
-      lineHeight: 1.5,
-    },
-    body2: {
-      fontSize: '0.875rem',
-      lineHeight: 1.43,
     },
     button: {
       fontWeight: 600,
       textTransform: 'none',
-      letterSpacing: '0.02857em',
     },
   },
   shape: {
@@ -106,7 +85,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 8,
-          padding: '10px 24px',
+          padding: '8px 16px',
         },
         contained: {
           boxShadow: '0 4px 14px 0 rgba(124, 77, 255, 0.4)',
@@ -119,45 +98,23 @@ const theme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: 16,
-          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
           backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05))',
+          backdropFilter: 'blur(10px)',
         },
       },
     },
     MuiAppBar: {
       styleOverrides: {
         root: {
-          background: 'linear-gradient(135deg, #1E1E1E 0%, #121212 100%)',
-          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)',
+          backgroundColor: 'rgba(30, 30, 30, 0.9)',
+          backdropFilter: 'blur(10px)',
         },
       },
     },
     MuiDrawer: {
       styleOverrides: {
         paper: {
-          background: 'linear-gradient(180deg, #1E1E1E 0%, #121212 100%)',
-        },
-      },
-    },
-    MuiTextField: {
-      styleOverrides: {
-        root: {
-          '& .MuiOutlinedInput-root': {
-            '&:hover fieldset': {
-              borderColor: '#7C4DFF',
-            },
-            '&.Mui-focused fieldset': {
-              borderColor: '#7C4DFF',
-            },
-          },
-        },
-      },
-    },
-    MuiChip: {
-      styleOverrides: {
-        root: {
-          borderRadius: 8,
+          backgroundColor: '#1A1A1A',
         },
       },
     },

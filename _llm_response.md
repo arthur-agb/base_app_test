@@ -32,11 +32,7 @@ find frontend/src -type f -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name
 cat frontend/src/theme.js
 ```
 
-```bash
-cat frontend/src/App.css
-```
-
-Based on my exploration, I found the existing theme configuration. I'll update the global theme with a modern dark/vibrant palette.
+Based on my exploration, I found the existing theme configuration. I'll update it with a modern dark/vibrant palette.
 
 ```javascript frontend/src/theme.js
 import { createTheme } from '@mui/material/styles';
@@ -91,52 +87,31 @@ const theme = createTheme({
     fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
     h1: {
       fontWeight: 700,
-      fontSize: '3.5rem',
-      letterSpacing: '-0.01562em',
+      fontSize: '2.5rem',
     },
     h2: {
       fontWeight: 600,
-      fontSize: '2.75rem',
-      letterSpacing: '-0.00833em',
+      fontSize: '2rem',
     },
     h3: {
       fontWeight: 600,
-      fontSize: '2.25rem',
+      fontSize: '1.75rem',
     },
     h4: {
       fontWeight: 600,
-      fontSize: '1.75rem',
+      fontSize: '1.5rem',
     },
     h5: {
       fontWeight: 500,
-      fontSize: '1.5rem',
+      fontSize: '1.25rem',
     },
     h6: {
       fontWeight: 500,
-      fontSize: '1.25rem',
-    },
-    subtitle1: {
-      fontWeight: 400,
       fontSize: '1rem',
-      lineHeight: 1.75,
-    },
-    subtitle2: {
-      fontWeight: 500,
-      fontSize: '0.875rem',
-      lineHeight: 1.57,
-    },
-    body1: {
-      fontSize: '1rem',
-      lineHeight: 1.5,
-    },
-    body2: {
-      fontSize: '0.875rem',
-      lineHeight: 1.43,
     },
     button: {
       fontWeight: 600,
       textTransform: 'none',
-      letterSpacing: '0.02857em',
     },
   },
   shape: {
@@ -147,7 +122,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 8,
-          padding: '10px 24px',
+          padding: '8px 16px',
         },
         contained: {
           boxShadow: '0 4px 14px 0 rgba(124, 77, 255, 0.4)',
@@ -160,45 +135,23 @@ const theme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: 16,
-          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
           backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05))',
+          backdropFilter: 'blur(10px)',
         },
       },
     },
     MuiAppBar: {
       styleOverrides: {
         root: {
-          background: 'linear-gradient(135deg, #1E1E1E 0%, #121212 100%)',
-          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)',
+          backgroundColor: 'rgba(30, 30, 30, 0.9)',
+          backdropFilter: 'blur(10px)',
         },
       },
     },
     MuiDrawer: {
       styleOverrides: {
         paper: {
-          background: 'linear-gradient(180deg, #1E1E1E 0%, #121212 100%)',
-        },
-      },
-    },
-    MuiTextField: {
-      styleOverrides: {
-        root: {
-          '& .MuiOutlinedInput-root': {
-            '&:hover fieldset': {
-              borderColor: '#7C4DFF',
-            },
-            '&.Mui-focused fieldset': {
-              borderColor: '#7C4DFF',
-            },
-          },
-        },
-      },
-    },
-    MuiChip: {
-      styleOverrides: {
-        root: {
-          borderRadius: 8,
+          backgroundColor: '#1A1A1A',
         },
       },
     },
@@ -244,7 +197,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #0a0a0a 0%, #121212 100%);
+  background: linear-gradient(135deg, #121212 0%, #1a1a1a 100%);
   min-height: 100vh;
 }
 
@@ -270,47 +223,42 @@ code {
 ::-webkit-scrollbar-thumb:hover {
   background: #B47CFF;
 }
+
+/* Selection color */
+::selection {
+  background-color: rgba(124, 77, 255, 0.3);
+  color: #FFFFFF;
+}
 ```
 
 ```javascript frontend/src/App.js
 import React from 'react';
-import { Box, Container, Typography, Button, Card, CardContent, Grid, Paper } from '@mui/material';
-import './App.css';
+import { Box, Container, Typography, Button, Paper, Grid } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from './theme';
 
 function App() {
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
-      <Container maxWidth="lg">
-        <Box sx={{ py: 8 }}>
-          <Typography 
-            variant="h1" 
-            component="h1" 
-            gutterBottom
-            sx={{ 
-              color: 'primary.main',
-              mb: 4
-            }}
-          >
-            Modern Dark Theme
-          </Typography>
-          
-          <Typography 
-            variant="subtitle1" 
-            sx={{ 
-              color: 'text.secondary',
-              mb: 6,
-              maxWidth: '800px'
-            }}
-          >
-            This application features a modern dark theme with vibrant accent colors. 
-            The palette uses deep backgrounds with purple and cyan accents for a contemporary look.
-          </Typography>
-
-          <Grid container spacing={4} sx={{ mb: 6 }}>
-            <Grid item xs={12} md={6}>
-              <Card>
-                <CardContent>
-                  <Typography variant="h5" gutterBottom sx={{ color: 'primary.main' }}>
+    <ThemeProvider theme={theme}>
+      <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
+        <Container maxWidth="lg">
+          <Box sx={{ py: 8 }}>
+            <Typography 
+              variant="h1" 
+              gutterBottom 
+              sx={{ 
+                color: 'primary.main',
+                textAlign: 'center',
+                mb: 6
+              }}
+            >
+              Modern Dark Theme
+            </Typography>
+            
+            <Grid container spacing={4}>
+              <Grid item xs={12} md={6}>
+                <Paper sx={{ p: 4, height: '100%' }}>
+                  <Typography variant="h5" gutterBottom sx={{ color: 'primary.light' }}>
                     Primary Colors
                   </Typography>
                   <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mt: 2 }}>
@@ -318,13 +266,14 @@ function App() {
                     <Box sx={{ width: 60, height: 60, bgcolor: 'primary.light', borderRadius: 1 }} />
                     <Box sx={{ width: 60, height: 60, bgcolor: 'primary.dark', borderRadius: 1 }} />
                   </Box>
-                </CardContent>
-              </Card>
-            </Grid>
-            
-            <Grid item xs={12} md={6}>
-              <Card>
-                <CardContent>
+                  <Typography variant="body1" sx={{ mt: 3, color: 'text.secondary' }}>
+                    This is an example of the new vibrant purple primary palette with enhanced contrast.
+                  </Typography>
+                </Paper>
+              </Grid>
+              
+              <Grid item xs={12} md={6}>
+                <Paper sx={{ p: 4, height: '100%' }}>
                   <Typography variant="h5" gutterBottom sx={{ color: 'secondary.main' }}>
                     Secondary Colors
                   </Typography>
@@ -333,128 +282,73 @@ function App() {
                     <Box sx={{ width: 60, height: 60, bgcolor: 'secondary.light', borderRadius: 1 }} />
                     <Box sx={{ width: 60, height: 60, bgcolor: 'secondary.dark', borderRadius: 1 }} />
                   </Box>
-                </CardContent>
-              </Card>
+                  <Typography variant="body1" sx={{ mt: 3, color: 'text.secondary' }}>
+                    The cyan secondary palette provides excellent contrast against dark backgrounds.
+                  </Typography>
+                </Paper>
+              </Grid>
             </Grid>
-          </Grid>
-
-          <Grid container spacing={3} sx={{ mb: 6 }}>
-            <Grid item xs={12} sm={6} md={3}>
-              <Paper sx={{ p: 3, textAlign: 'center', bgcolor: 'error.main' }}>
-                <Typography variant="h6" sx={{ color: 'white' }}>Error</Typography>
-              </Paper>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <Paper sx={{ p: 3, textAlign: 'center', bgcolor: 'warning.main' }}>
-                <Typography variant="h6" sx={{ color: 'black' }}>Warning</Typography>
-              </Paper>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <Paper sx={{ p: 3, textAlign: 'center', bgcolor: 'info.main' }}>
-                <Typography variant="h6" sx={{ color: 'black' }}>Info</Typography>
-              </Paper>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <Paper sx={{ p: 3, textAlign: 'center', bgcolor: 'success.main' }}>
-                <Typography variant="h6" sx={{ color: 'black' }}>Success</Typography>
-              </Paper>
-            </Grid>
-          </Grid>
-
-          <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
-            <Button variant="contained" color="primary">
-              Primary Button
-            </Button>
-            <Button variant="contained" color="secondary">
-              Secondary Button
-            </Button>
-            <Button variant="outlined" color="primary">
-              Outlined Button
-            </Button>
-            <Button variant="text" color="primary">
-              Text Button
-            </Button>
-          </Box>
-
-          <Box sx={{ mt: 8 }}>
-            <Typography variant="h4" gutterBottom sx={{ color: 'text.primary' }}>
-              Typography Scale
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              <Typography variant="h1">H1 Heading</Typography>
-              <Typography variant="h2">H2 Heading</Typography>
-              <Typography variant="h3">H3 Heading</Typography>
-              <Typography variant="h4">H4 Heading</Typography>
-              <Typography variant="h5">H5 Heading</Typography>
-              <Typography variant="h6">H6 Heading</Typography>
-              <Typography variant="body1">Body 1 text with normal weight and size.</Typography>
-              <Typography variant="body2">Body 2 text with smaller size.</Typography>
-              <Typography variant="subtitle1">Subtitle 1 for supporting text.</Typography>
-              <Typography variant="subtitle2">Subtitle 2 for smaller supporting text.</Typography>
+            
+            <Box sx={{ mt: 6, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3 }}>
+              <Typography variant="h4" sx={{ color: 'text.primary', mb: 2 }}>
+                Button Examples
+              </Typography>
+              <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap', justifyContent: 'center' }}>
+                <Button variant="contained" color="primary">
+                  Primary Button
+                </Button>
+                <Button variant="contained" color="secondary">
+                  Secondary Button
+                </Button>
+                <Button variant="outlined" color="primary">
+                  Outlined Button
+                </Button>
+                <Button variant="text" color="primary">
+                  Text Button
+                </Button>
+              </Box>
+              
+              <Box sx={{ mt: 4, display: 'flex', gap: 3, flexWrap: 'wrap', justifyContent: 'center' }}>
+                <Button variant="contained" color="success">
+                  Success
+                </Button>
+                <Button variant="contained" color="warning">
+                  Warning
+                </Button>
+                <Button variant="contained" color="error">
+                  Error
+                </Button>
+                <Button variant="contained" color="info">
+                  Info
+                </Button>
+              </Box>
             </Box>
+            
+            <Paper sx={{ p: 4, mt: 6 }}>
+              <Typography variant="h5" gutterBottom sx={{ color: 'text.primary' }}>
+                Typography Scale
+              </Typography>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <Typography variant="h1">H1 Heading</Typography>
+                <Typography variant="h2">H2 Heading</Typography>
+                <Typography variant="h3">H3 Heading</Typography>
+                <Typography variant="h4">H4 Heading</Typography>
+                <Typography variant="h5">H5 Heading</Typography>
+                <Typography variant="h6">H6 Heading</Typography>
+                <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+                  Body text with secondary color for better readability hierarchy.
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'text.disabled' }}>
+                  Disabled text for less important information.
+                </Typography>
+              </Box>
+            </Paper>
           </Box>
-        </Box>
-      </Container>
-    </Box>
+        </Container>
+      </Box>
+    </ThemeProvider>
   );
 }
 
 export default App;
-```
-
-```css frontend/src/App.css
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Additional global styles */
-.gradient-text {
-  background: linear-gradient(45deg, #7C4DFF, #00E5FF);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.glow-effect {
-  filter: drop-shadow(0 0 8px rgba(124, 77, 255, 0.6));
-}
-
-.smooth-transition {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
 ```
