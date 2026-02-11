@@ -13,10 +13,10 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+    setError('');
+    setLoading(true);
+
     try {
-      setError('');
-      setLoading(true);
       await login(email, password);
       navigate('/dashboard');
     } catch (err) {
@@ -37,13 +37,12 @@ const LoginPage = () => {
         
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
-            <label htmlFor="email" className="form-label">Email Address</label>
+            <label htmlFor="email">Email Address</label>
             <input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="form-input"
               placeholder="Enter your email"
               required
               disabled={loading}
@@ -51,13 +50,12 @@ const LoginPage = () => {
           </div>
           
           <div className="form-group">
-            <label htmlFor="password" className="form-label">Password</label>
+            <label htmlFor="password">Password</label>
             <input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="form-input"
               placeholder="Enter your password"
               required
               disabled={loading}
@@ -69,14 +67,31 @@ const LoginPage = () => {
             className="login-button"
             disabled={loading}
           >
-            {loading ? 'Signing In...' : 'Sign In'}
+            {loading ? 'Signing in...' : 'Sign In'}
           </button>
-          
-          <div className="login-links">
-            <a href="/forgot-password" className="login-link">Forgot Password?</a>
-            <a href="/register" className="login-link">Create Account</a>
-          </div>
         </form>
+        
+        <div className="login-footer">
+          <p>
+            Don't have an account?{' '}
+            <button 
+              className="link-button"
+              onClick={() => navigate('/register')}
+              disabled={loading}
+            >
+              Sign up here
+            </button>
+          </p>
+          <p>
+            <button 
+              className="link-button"
+              onClick={() => navigate('/forgot-password')}
+              disabled={loading}
+            >
+              Forgot your password?
+            </button>
+          </p>
+        </div>
       </div>
     </div>
   );

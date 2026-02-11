@@ -14,10 +14,10 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+    setError('');
+    setLoading(true);
+
     try {
-      setError('');
-      setLoading(true);
       await login(email, password);
       navigate('/dashboard');
     } catch (err) {
@@ -38,13 +38,12 @@ const LoginPage = () => {
         
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
-            <label htmlFor="email" className="form-label">Email Address</label>
+            <label htmlFor="email">Email Address</label>
             <input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="form-input"
               placeholder="Enter your email"
               required
               disabled={loading}
@@ -52,13 +51,12 @@ const LoginPage = () => {
           </div>
           
           <div className="form-group">
-            <label htmlFor="password" className="form-label">Password</label>
+            <label htmlFor="password">Password</label>
             <input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="form-input"
               placeholder="Enter your password"
               required
               disabled={loading}
@@ -70,14 +68,31 @@ const LoginPage = () => {
             className="login-button"
             disabled={loading}
           >
-            {loading ? 'Signing In...' : 'Sign In'}
+            {loading ? 'Signing in...' : 'Sign In'}
           </button>
-          
-          <div className="login-links">
-            <a href="/forgot-password" className="login-link">Forgot Password?</a>
-            <a href="/register" className="login-link">Create Account</a>
-          </div>
         </form>
+        
+        <div className="login-footer">
+          <p>
+            Don't have an account?{' '}
+            <button 
+              className="link-button"
+              onClick={() => navigate('/register')}
+              disabled={loading}
+            >
+              Sign up here
+            </button>
+          </p>
+          <p>
+            <button 
+              className="link-button"
+              onClick={() => navigate('/forgot-password')}
+              disabled={loading}
+            >
+              Forgot your password?
+            </button>
+          </p>
+        </div>
       </div>
     </div>
   );
@@ -92,18 +107,18 @@ export default LoginPage;
   justify-content: flex-start;
   align-items: flex-start;
   min-height: 100vh;
-  padding: 40px;
+  padding: 20px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 .login-form-wrapper {
   background: white;
-  border-radius: 12px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   padding: 40px;
   width: 100%;
-  max-width: 420px;
-  text-align: left;
+  max-width: 400px;
+  margin: 0;
 }
 
 .login-title {
@@ -116,13 +131,22 @@ export default LoginPage;
 .login-subtitle {
   font-size: 16px;
   color: #666;
-  margin-bottom: 32px;
+  margin-bottom: 30px;
+}
+
+.login-error {
+  background-color: #fee;
+  color: #c33;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  border-left: 4px solid #c33;
 }
 
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
 }
 
 .form-group {
@@ -131,27 +155,27 @@ export default LoginPage;
   gap: 8px;
 }
 
-.form-label {
+.form-group label {
   font-size: 14px;
   font-weight: 600;
   color: #444;
 }
 
-.form-input {
+.form-group input {
   padding: 12px 16px;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
   font-size: 16px;
-  transition: all 0.3s ease;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
   outline: none;
-}
-
-.form-input:focus {
   border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
 }
 
-.form-input:disabled {
+.form-group input:disabled {
   background-color: #f5f5f5;
   cursor: not-allowed;
 }
@@ -160,18 +184,22 @@ export default LoginPage;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
-  border-radius: 8px;
-  padding: 14px 24px;
+  border-radius: 4px;
+  padding: 14px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 8px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-top: 10px;
 }
 
 .login-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+}
+
+.login-button:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .login-button:disabled {
@@ -179,52 +207,59 @@ export default LoginPage;
   cursor: not-allowed;
 }
 
-.login-error {
-  background-color: #fee;
-  color: #c33;
-  padding: 12px 16px;
-  border-radius: 8px;
-  border: 1px solid #fcc;
-  margin-bottom: 24px;
+.login-footer {
+  margin-top: 30px;
+  text-align: center;
+  color: #666;
   font-size: 14px;
 }
 
-.login-links {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 24px;
-  padding-top: 24px;
-  border-top: 1px solid #eee;
+.login-footer p {
+  margin: 8px 0;
 }
 
-.login-link {
+.link-button {
+  background: none;
+  border: none;
   color: #667eea;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  transition: color 0.3s ease;
+  cursor: pointer;
+  font-size: inherit;
+  padding: 0;
+  text-decoration: underline;
 }
 
-.login-link:hover {
+.link-button:hover:not(:disabled) {
   color: #764ba2;
-  text-decoration: underline;
+}
+
+.link-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .login-container {
-    padding: 20px;
+    padding: 15px;
   }
   
   .login-form-wrapper {
-    padding: 30px;
+    padding: 30px 25px;
     max-width: 100%;
   }
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    padding: 10px;
+  }
   
-  .login-links {
-    flex-direction: column;
-    gap: 12px;
-    align-items: flex-start;
+  .login-form-wrapper {
+    padding: 25px 20px;
+  }
+  
+  .login-title {
+    font-size: 24px;
   }
 }
 ```
