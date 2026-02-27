@@ -1,0 +1,8 @@
+### Theme Switching
+The `.dark` class automatically switches all tokens to dark mode variants.
+
+## Migration Checklist
+1. Replace hard-coded hex values with token references
+2. Test both light and dark modes
+3. Verify accessibility contrast ratios
+4. Update Tailwind config to reference tokens
